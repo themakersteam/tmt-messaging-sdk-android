@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:navigationIcon="@drawable/arrow_back"
+                app:titleTextAppearance="@style/ChatView.TitleText"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <fragment
+        android:id="@+id/map_fragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp">
+
+        <ImageButton
+            android:id="@+id/button_get_current_location"
+            android:src="@drawable/ic_my_location"
+            android:background="?attr/selectableItemBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Get current location"
+            android:layout_gravity="center"/>
+
+        <RadioGroup
+            android:id="@+id/toggle_map_view"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/toggle_map_outline"
+            android:checkedButton="@+id/rb_map"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_map"
+                android:background="@drawable/toggle_map_bg"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/text_map"
+                android:paddingStart="8dp"
+                android:paddingLeft="8dp"
+                android:paddingEnd="8dp"
+                android:paddingRight="8dp"
+                android:textColor="@android:color/white" />
+
+            <RadioButton
+                android:id="@+id/rb_satellite"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/toggle_map_bg"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/text_satellite"
+                android:paddingStart="8dp"
+                android:paddingLeft="8dp"
+                android:paddingEnd="8dp"
+                android:paddingRight="8dp"
+                android:textColor="@android:color/white" />
+        </RadioGroup>
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_marker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_marker" />
+
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:padding="8dp"
+        android:background="@color/groupChatTextMe"
+        android:textColor="@color/groupChatDateBackground"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_above="@+id/layout_send_location"/>
+
+    <LinearLayout
+        android:id="@+id/layout_send_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/groupChatTextMe"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="8dp">
+
+        <ImageButton
+            android:id="@+id/button_send_location"
+            android:src="@drawable/ic_send_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:tint="@color/message_center_primary_dark"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/tv_send_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/groupChatTextMe"
+            android:text="@string/message_center_send_your_location"
+            android:visibility="visible"
+            android:gravity="start|center_vertical"
+            android:textAlignment="viewStart"
+            android:padding="12dp"
+            android:textColor="@color/btn_send"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

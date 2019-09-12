@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_parent"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:paddingRight="8dp"
+    android:paddingLeft="8dp">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_group_chat_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        app:cardBackgroundColor="@color/message_center_chat_view_bubble_color"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="1dp"
+        app:cardPreventCornerOverlap="false">
+
+        <ImageView
+            android:id="@+id/image_group_chat_file_thumbnail"
+            android:layout_width="228dp"
+            android:layout_height="148dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:layout_marginBottom="20dp"
+            />
+
+        <ImageView
+            android:layout_width="228dp"
+            android:layout_height="148dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_play"
+            android:adjustViewBounds="true"
+            android:layout_marginBottom="20dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom|right"
+            android:gravity="bottom|right"
+            android:layout_marginBottom="4dp"
+            android:layoutDirection="ltr"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <TextView
+                android:id="@+id/text_group_chat_time"
+                android:textSize="10sp"
+                android:text="21:27"
+                android:textColor="#9b9b9b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/img_group_chat_read_receipt"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/ic_msgsent"
+                android:layout_gravity="center"
+                android:layout_width="12dp"
+                android:layout_height="8dp"/>
+
+        </LinearLayout>
+
+        <com.dinuscxj.progressbar.CircleProgressBar
+            android:id="@+id/circle_progress"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_above="@id/time"
+            android:layout_alignRight="@id/time"
+            android:visibility="gone"
+            app:progress_stroke_width="3.5dp"
+            app:progress_start_color="@color/message_center_primary_dark"
+            app:progress_end_color="@color/message_center_primary"
+            app:progress_background_color="#c1c1c1"
+            app:progress_stroke_cap="butt"/>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>
