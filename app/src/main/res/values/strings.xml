@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:override="true">
+    <string name="app_name" translatable="false">MessagingCenter</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyD-ox5keckpSJoWMsFRMscv9hEMZ3OZFb4</string>
+
+
+    <string name="download">Download</string>
+    <string name="cancel">Cancel</string>
+    <string name="upload">Upload</string>
+    <string name="resend_message">Resend</string>
+    <string name="delete_message">Delete</string>
+    <string name="message_sending">Sending</string>
+    <string name="message_failed">Failed</string>
+
+    <string name="file_must_be_in_local_storage">File must be located in local storage.</string>
+    <string name="extracting_file_information_failed">Extracting file information failed.</string>
+    <string name="download_file">Download file?</string>
+    <string name="ok">Ok</string>
+    <string name="storage_access_permission_needed">Storage access permissions are required to upload/download files.</string>
+    <string name="camera_access_permission_needed">Camera access permissions are required to take pictures.</string>
+    <string name="audio_access_permission_needed">Record Audio access permissions are required to send voice notes.</string>
+    <string name="ms_phone_access_permission_needed">Call access permissions are required to make call.</string>
+    <string name="ms_call_message">Are you sure you want to call the driver?</string>
+    <string name="select_media">Select Media</string>
+    <string name="is_typing">%1$s is typing...</string>
+    <string name="two_typing">%1$s, %2$s is typing...</string>
+    <string name="multiple_users_are_typing">Multiple users are typing</string>
+    <string name="retry">Retry?</string>
+    <string name="edit_message">Edit message</string>
+    <string name="delete_message_option">Delete message</string>
+    <string name="type_message_hint">Type a message</string>
+    <string name="ms_caption">Caption</string>
+    <string name="ms_camera">Camera</string>
+    <string name="ms_photos">Photos</string>
+    <string name="ms_location">Location</string>
+    <string name="ms_chat_failed_to_send">Not sent! Tap to retry</string>
+    <string name="ms_message_file_in_progress">Your image message is not sent, continue without sending?</string>
+    <string name="ms_message_failed_yes">Yes</string>
+    <string name="ms_message_failed_no">No</string>
+    <string name="ms_call">Call</string>
+    <string name="ms_calling">Calling...</string>
+    <string name="ms_decline">Decline</string>
+    <string name="ms_connecting">Connecting..</string>
+    <string name="ms_connection_failed">Connection Failed</string>
+    <string name="ms_slide_to_cancel">Slide to Cancel</string>
+
+    <!-- Global Strings -->
+    <string name="message_center_toolbar_title">Message Center</string>
+    <string name="message_center_channel_is_frozen">Chat is frozen !</string>
+    <string name="message_center_send_location_title">Send Location</string>
+    <string name="message_center_send_current_location">Send your current location</string>
+    <string name="message_center_send_your_location">Send this location</string>
+    <string name="message_center_new_message_from">New Message From: </string>
+    <string name="need_gps_permission">Need GPS permission for getting your location</string>
+    <string name="send_current_location">Send current location</string>
+    <string name="text_satellite">Satellite</string>
+    <string name="text_map">Map</string>
+
+</resources>

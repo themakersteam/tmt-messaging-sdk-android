@@ -1,0 +1,102 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_parent"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_group_chat_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:cardBackgroundColor="@color/groupChatBubbleOther"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        android:layout_marginRight="4dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="228dp"
+                android:layout_height="148dp"
+                app:cardBackgroundColor="@color/message_center_chat_view_bubble_color"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="2dp">
+
+                <ImageView
+                    android:id="@+id/image_group_chat_file_thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    />
+
+            </androidx.cardview.widget.CardView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
+
+                <TextView
+                    android:id="@+id/text_caption"
+                    android:textSize="12sp"
+                    android:text="Hi, how are you today? is everything ok "
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_toLeftOf="@+id/time_container"
+                    android:visibility="gone"
+                    android:layout_alignParentLeft="true"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/time_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:id="@+id/text_group_chat_time"
+                        android:textSize="10sp"
+                        android:text="21:27"
+                        android:layout_gravity="bottom"
+                        android:gravity="bottom"
+                        android:textColor="#9b9b9b"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>
