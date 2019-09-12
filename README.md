@@ -17,7 +17,7 @@
  * Add the dependency
     ```bash
 	    dependencies {
-	        implementation 'com.tmt.messagecenter:android-message-center:{latest-version}'
+	        implementation 'com.github.themakersteam:tmt-live-chat-sdk-android:{latest-version}'
 	}
     ```
 
