@@ -111,6 +111,7 @@ public class S3FileUploadManager extends Manager {
                 }
                 else {
                     String url = getUrlFromXml(packet.toXML(null).toString());
+                    url = url.replaceAll("AWSAccessKeyId", "GoogleAccessId");
                     final String id = getIdFromXml(packet.toXML(null).toString());
                     final Message message = new Message();
                     message.setBody("<empty>");

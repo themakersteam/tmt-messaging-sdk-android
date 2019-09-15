@@ -166,7 +166,7 @@ public class MessageCenterChatFragment extends Fragment implements XmppChatCallb
                 if (s.length() == 0) {
                     xmppClient.setTypingStatus(false);
                 }
-                else {
+                else if (s.length() == 1){
                     xmppClient.setTypingStatus(true);
                 }
             }
