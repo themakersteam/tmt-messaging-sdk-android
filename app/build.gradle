@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-
-group='com.tmt.messagecenter'
+apply plugin: 'maven-publish'
+apply plugin: 'digital.wup.android-maven-publish'
 
 android {
     compileSdkVersion 29
@@ -19,11 +18,34 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     mavenCentral()
+}
+
+publishing {
+    publications {
+        mavenAar(MavenPublication) {
+            groupId 'com.tmt'
+            artifactId 'messagecenter'
+            version '1.0.0'
+            from components.android
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username gitUser
+                password gitToken
+            }
+            url "https://maven.pkg.github.com/themakersteam/tmt-live-chat-sdk-android"
+        }
+    }
 }
 
 ext {

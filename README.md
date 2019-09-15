@@ -3,13 +3,32 @@
 
 ## Android messaging library
 
-### 1. Setup
-* Add jitpack dependency to root build.gradle
+### 1. SDK
+* Add Your Github username, authToken to gradle.properties (Global Properties)
+    ```bash
+            gitToken=token
+            gitUser=github_user_name
+    ```
+* To generate access token please check: https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line
+
+* To publish a new version upgrade the version and 
+    ```bash
+            ./gradlew clean build publish
+     ```
+     
+### 2. Setup
+* Add maven dependency to root build.gradle
     ```bash
         	allprojects {
         		repositories {
         			...
-        			maven { url 'https://jitpack.io' }
+        			 maven {
+                            credentials {
+                                    username gitUser
+                                    password gitToken
+                            }
+                     url "https://maven.pkg.github.com/themakersteam/tmt-live-chat-sdk-android"
+                    }
         		}
         	}
      ```
@@ -17,11 +36,11 @@
  * Add the dependency
     ```bash
 	    dependencies {
-	        implementation 'com.tmt.messagecenter:android-message-center:{latest-version}'
+	        implementation 'com.tmt:messagecenter:{latest-version}'
 	}
     ```
 
-### 2. Sample App
+### 3. Sample App
 
   * For Debugging/Testing the library (to be able to run the library as an application) do the following:
 
@@ -31,9 +50,9 @@
 
   * Test and debug method inside ``TestActivity.Java``, Default Launcher for the app
 
-### 3. Usage
+### 4. Usage
 
-#### 3.0 Design
+#### 4.0 Design
  * For toolbar title override the following string to strings.xml - strings-ar.xml
 
     ```bash
@@ -51,7 +70,7 @@
      <color name="message_center_chat_view_bubble_color">{color}</color>
      ```
 
-#### 3.1 connect()
+#### 4.1 connect()
 
  * First Step for integrating the app is to connect on the start of the application
 
@@ -81,7 +100,7 @@
                   });
    ```
 
-#### 3.2 getUnReadMessagesCount()
+#### 4.2 getUnReadMessagesCount()
  * Getting Total of Unread Messages
 
       ```bash
@@ -89,7 +108,7 @@
       ```
  * if chat_id must be provided
 
-#### 3.3 openChatView()
+#### 4.3 openChatView()
  * Joining the chat by url(id) provided
  * Sample code for joining a conversation
     ```bash
@@ -102,7 +121,7 @@
  * an error callback will be triggered in case of error
  * onActivityResult will be triggered on the close of the Chat View with request_code: MessageCenter.OPEN_CHAT_VIEW_REQUEST_CODE, response_code: MessageCenter.OPEN_CHAT_VIEW_RESPONSE_CODE
 
-#### 3.4 isConnected()
+#### 4.4 isConnected()
 
  * returns true if Message Center is connected
 
@@ -111,7 +130,7 @@
     MessageCenter.isConnected();
     ```
 
-#### 3.5 disconnect()
+#### 4.5 disconnect()
 
  * Disconnects the chat services, best case to use if with user logout
 
