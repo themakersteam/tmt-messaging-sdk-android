@@ -33,7 +33,7 @@ publishing {
         mavenAar(MavenPublication) {
             groupId 'com.tmt'
             artifactId 'messagecenter'
-            version '1.0.0'
+            version '1.0.1'
             from components.android
         }
     }
@@ -49,7 +49,7 @@ publishing {
 }
 
 ext {
-    googleLibVersion = "11.8.0"
+    googleLibVersion = "17.0.0"
 }
 
 dependencies {
@@ -61,7 +61,6 @@ dependencies {
     //Maps
     implementation "com.google.android.gms:play-services-maps:${googleLibVersion}"
     implementation "com.google.android.gms:play-services-location:${googleLibVersion}"
-    implementation "com.google.android.gms:play-services-places:${googleLibVersion}"
 
     //JSOUP
     implementation 'org.jsoup:jsoup:1.11.3'
