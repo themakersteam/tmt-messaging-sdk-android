@@ -44,6 +44,8 @@ import com.tmt.messagecenter.connection_xmpp.interfaces.SendFileInterface;
 import com.tmt.messagecenter.connection_xmpp.interfaces.XmppChatCallbacks;
 import com.tmt.messagecenter.model.Theme;
 import com.tmt.messagecenter.model.UserMessage;
+import com.tmt.messagecenter.screens.chat.adapters.FileOptionsBottomSheetAdapter;
+import com.tmt.messagecenter.screens.chat.adapters.MessageCenterChatAdapter;
 import com.tmt.messagecenter.screens.mylocation.MyLocationActivity;
 import com.tmt.messagecenter.screens.photoviewer.PhotoViewerActivity;
 import com.tmt.messagecenter.screens.sendfile.SendFileActivity;
