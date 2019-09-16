@@ -75,7 +75,7 @@
  * First Step for integrating the app is to connect on the start of the application
 
      ```bash
-    MessageCenter.connect(Context context, ConnectionRequest connection, ConnectionInterface connectionInterface)
+    Livechat.connect(Context context, ConnectionRequest connection, ConnectionInterface connectionInterface)
      ```
 
  * Connection Request Object Has the following items
@@ -87,7 +87,7 @@
  * Sample Code for connecting to Message Center
 
    ```bash
-       MessageCenter.connect(this, connectionRequest, new ConnectionInterface() {
+       Livechat.connect(this, connectionRequest, new ConnectionInterface() {
                       @Override
                       public void onConnected() {
 
@@ -104,7 +104,7 @@
  * Getting Total of Unread Messages
 
       ```bash
-     MessageCenter.getUnReadMessagesCount(Context context, String chat_id, UnReadCountInterface unread_message_interface)
+     Livechat.getUnReadMessagesCount(Context context, String chat_id, UnReadCountInterface unread_message_interface)
       ```
  * if chat_id must be provided
 
@@ -112,14 +112,14 @@
  * Joining the chat by url(id) provided
  * Sample code for joining a conversation
     ```bash
-    MessageCenter.openChatView(Activity: this, chat_id: "sample_chat_id", theme: new Theme(toolbar: "title", toolbar_subtitle: "subtitle"), openChatViewInterface: OpenChatViewInterface);
+    Livechat.openChatView(Activity: this, chat_id: "sample_chat_id", theme: new Theme(toolbar: "title", toolbar_subtitle: "subtitle"), openChatViewInterface: OpenChatViewInterface);
     ```
     
  * if Theme object is not provided, the app will take the defaults
  * Theme Object for android have (```app_name```,```toolbar```, ```toolbar_subtitle```, ```welcome_message```)
  * Executing this interface will open the chatting window
  * an error callback will be triggered in case of error
- * onActivityResult will be triggered on the close of the Chat View with request_code: MessageCenter.OPEN_CHAT_VIEW_REQUEST_CODE, response_code: MessageCenter.OPEN_CHAT_VIEW_RESPONSE_CODE
+ * onActivityResult will be triggered on the close of the Chat View with request_code: Livechat.OPEN_CHAT_VIEW_REQUEST_CODE, response_code: Livechat.OPEN_CHAT_VIEW_RESPONSE_CODE
 
 #### 4.4 isConnected()
 
@@ -127,19 +127,9 @@
 
  * Sample code for checking connection
     ```bash
-    MessageCenter.isConnected();
+    Livechat.isConnected();
     ```
 
 #### 4.5 disconnect()
 
  * Disconnects the chat services, best case to use if with user logout
-
- * Sample code for disconnecting
-    ```bash
-    MessageCenter.disconnect(Context context, new DisconnectInterface() {
-                @Override
-                public void onMessageCenterDisconnected() {
-
-                }
-            });
-    ```
