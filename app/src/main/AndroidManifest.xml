@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tmt.messagecenter">
+    package="com.tmt.livechat">
 
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -37,14 +37,14 @@
 
 <!--        </activity>-->
 
-        <activity android:name=".screens.chat.MessageCenterChatActivity"
+        <activity android:name="com.tmt.livechat.screens.chat.LiveChatActivity"
             android:configChanges="screenSize|keyboardHidden|screenLayout"
             android:theme="@style/ChatTheme"
             android:windowSoftInputMode="stateHidden"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".screens.sendfile.SendFileActivity"
+        <activity android:name="com.tmt.livechat.screens.sendfile.SendFileActivity"
             android:configChanges="screenSize|keyboardHidden|screenLayout"
             android:theme="@style/ChatTheme"
             android:windowSoftInputMode="stateHidden"
@@ -52,19 +52,19 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".screens.mylocation.MyLocationActivity"
+            android:name="com.tmt.livechat.screens.mylocation.MyLocationActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"
             android:screenOrientation="portrait"
             android:theme="@style/ChatTheme"/>
 
         <activity
-            android:name=".screens.photoviewer.PhotoViewerActivity"
+            android:name="com.tmt.livechat.screens.photoviewer.PhotoViewerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"
             android:screenOrientation="portrait"
             android:theme="@style/ChatTheme"/>
 
         <activity
-            android:name=".screens.mediaplayer.MediaPlayerActivity"
+            android:name="com.tmt.livechat.screens.mediaplayer.MediaPlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"
             android:screenOrientation="portrait"
             android:theme="@style/ChatTheme"/>

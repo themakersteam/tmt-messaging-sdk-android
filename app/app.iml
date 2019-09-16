@@ -100,6 +100,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.code.findbugs:jsr305:2.0.1@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test.espresso:espresso-core:3.2.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test:runner:1.2.0@aar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: androidx.multidex:multidex-instrumentation:2.0.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test:monitor:1.2.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test.espresso:espresso-idling-resource:3.2.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.collection:collection:1.0.0@jar" level="project" />
@@ -139,6 +140,7 @@
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.7@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-text:1.6@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.8.1@jar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.multidex:multidex:2.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.androidadvance:topsnackbar:1.1.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.material:material:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.appcompat:appcompat:1.0.2@aar" level="project" />
