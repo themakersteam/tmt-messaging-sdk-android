@@ -1,4 +1,4 @@
-package com.tmt.messagecenter.screens.chat;
+package com.tmt.messagecenter.screens.chat.adapters;
 
 import android.app.Dialog;
 import android.view.View;

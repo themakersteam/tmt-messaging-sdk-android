@@ -1,6 +1,5 @@
 package com.tmt.messagecenter.screens.chat;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -30,7 +29,6 @@ public class MessageCenterChatActivity extends AppCompatActivity {
     private void init() {
         theme = getIntent().hasExtra("THEME") ? (Theme) getIntent().getExtras().getParcelable("THEME") : null;
         initToolBar();
-        //MessageCenter.clearNotificationInboxMessages(channelUrl);
         Fragment fragment = MessageCenterChatFragment.newInstance();
         Bundle bundle = new Bundle();
         if (getIntent() != null && getIntent().getExtras() != null) {
