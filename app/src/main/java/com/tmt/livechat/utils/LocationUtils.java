@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.tmt.livechat.model.UserMessage;
 
 import java.io.IOException;
 import java.util.List;
@@ -72,6 +73,12 @@ public class LocationUtils {
             }
         }
         return geocodeLocation;
+    }
+
+
+    public static String getLocationUrlMessageIfExists(UserMessage mMessage) {
+        return mMessage.isLocation() ? "https://www.google.com/maps/search/?api=1&query=" +  mMessage.getLocation().getLat() + "," + mMessage.getLocation().getLng()
+                : mMessage.getMessage().getBody();
     }
 
     public static void setCameraToReceivedLocation(GoogleMap googleMap, double lat, double lng) {

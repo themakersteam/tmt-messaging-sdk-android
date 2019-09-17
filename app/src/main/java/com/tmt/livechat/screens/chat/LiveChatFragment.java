@@ -54,7 +54,8 @@ import com.tmt.livechat.utils.AudioRecorderUtil;
 import com.tmt.livechat.utils.DownloadUtils;
 import com.tmt.livechat.utils.FileUtils;
 import com.tmt.livechat.utils.LoadingUtils;
-import com.tmt.livechat.utils.TextUtils;
+import com.tmt.livechat.utils.LocationUtils;
+
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import java.io.File;
 import java.util.HashMap;
@@ -331,7 +332,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
             return;
         }
         if (message.isLocation()) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(TextUtils.getLocationUrlMessageIfExists(message)));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(LocationUtils.getLocationUrlMessageIfExists(message)));
             try {
                 startActivity(browserIntent);
             }

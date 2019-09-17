@@ -12,7 +12,7 @@ import com.tmt.livechat.R;
 import com.tmt.livechat.model.UserMessage;
 import com.tmt.livechat.screens.chat.adapters.LiveChatAdapter;
 import com.tmt.livechat.utils.DateUtils;
-import com.tmt.livechat.utils.TextUtils;
+import com.tmt.livechat.utils.LocationUtils;
 
 /**
  * Created by mohammednabil on 2019-09-16.
@@ -38,7 +38,7 @@ public class MyUserMessageHolder extends BaseViewBinder {
     }
 
     public void bind(final Context context, final UserMessage message, final LiveChatAdapter.OnItemClickListener clickListener, final int position) {
-        String mMessage = TextUtils.getLocationUrlMessageIfExists(message);
+        String mMessage = LocationUtils.getLocationUrlMessageIfExists(message);
         messageText.setText(mMessage);
         timeText.setText(message.getTimeStamp() != null ? DateUtils.formatTime(message.getTimeStamp()) : "");
         timeText.setTextColor(Color.parseColor("#9b9b9b"));
