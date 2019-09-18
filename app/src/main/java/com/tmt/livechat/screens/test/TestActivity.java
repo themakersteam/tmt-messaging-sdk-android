@@ -29,6 +29,11 @@ public class TestActivity extends AppCompatActivity {
             public void onConnected() {
                 Livechat.instance().openChatView(TestActivity.this, "test-room-nabil@conference.tmt-test.m.in-app.io", theme, new OpenChatInterface() {
                     @Override
+                    public void screenWillLaunch() {
+
+                    }
+
+                    @Override
                     public void userNotConnected() {
                     }
                 });
