@@ -34,7 +34,7 @@ publishing {
         mavenAar(MavenPublication) {
             groupId 'com.tmt'
             artifactId 'messagecenter'
-            version '1.0.4'
+            version '1.0.5'
             from components.android
         }
     }

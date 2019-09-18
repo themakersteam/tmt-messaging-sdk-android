@@ -45,8 +45,10 @@ public class Livechat extends LivechatInterface {
 
     @Override
     public void openChatView(Activity context, String chat_id, Theme theme, OpenChatInterface openChatInterface) {
-        if (isConnected())
+        if (isConnected()) {
+            openChatInterface.screenWillLaunch();
             openChatActivity(context, chat_id, theme);
+        }
         else {
             if (openChatInterface != null)
                 openChatInterface.userNotConnected();
