@@ -47,7 +47,7 @@ import com.tmt.livechat.model.UserMessage;
 import com.tmt.livechat.screens.chat.adapters.FileOptionsBottomSheetAdapter;
 import com.tmt.livechat.screens.chat.adapters.LiveChatAdapter;
 import com.tmt.livechat.screens.mylocation.MyLocationActivity;
-import com.tmt.livechat.screens.photoviewer.PhotoViewerActivity;
+import com.tmt.livechat.screens.photoviewer.view.PhotoViewerActivity;
 import com.tmt.livechat.screens.sendfile.view.SendFileActivity;
 import com.tmt.livechat.utils.AudioPlayerUtils;
 import com.tmt.livechat.utils.AudioRecorderUtil;

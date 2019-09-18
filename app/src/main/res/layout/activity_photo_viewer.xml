@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:background="@android:color/black"
-    tools:context=".screens.photoviewer.PhotoViewerActivity">
+    tools:context=".screens.photoviewer.view.PhotoViewerActivity">
 
 
     <com.github.chrisbanes.photoview.PhotoView
