@@ -63,12 +63,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/ChatTheme"/>
 
-        <activity
-            android:name="com.tmt.livechat.screens.mediaplayer.MediaPlayerActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"
-            android:screenOrientation="portrait"
-            android:theme="@style/ChatTheme"/>
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
