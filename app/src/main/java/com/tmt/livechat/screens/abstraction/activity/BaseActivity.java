@@ -13,6 +13,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_GALLERY_CAPTURE = 2;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
 
     @Override
@@ -20,10 +21,12 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
-    protected void setupToolbarWithHome(Toolbar toolbar) {
+    protected void setupToolbarWithHome(Toolbar toolbar, String title) {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (title != null)
+                getSupportActionBar().setTitle(title);
         }
     }
 

@@ -52,7 +52,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.tmt.livechat.screens.mylocation.MyLocationActivity"
+            android:name="com.tmt.livechat.screens.mylocation.view.MyLocationActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"
             android:screenOrientation="portrait"
             android:theme="@style/ChatTheme"/>

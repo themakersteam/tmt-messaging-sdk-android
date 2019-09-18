@@ -30,7 +30,7 @@ public class SendFileActivity extends MvpActivity implements SendFileInterface.V
 
     @Override
     public void setupViews() {
-        setupToolbarWithHome((Toolbar) findViewById(R.id.toolbar));
+        setupToolbarWithHome((Toolbar) findViewById(R.id.toolbar), null);
         captionText = findViewById(R.id.edittext_caption_message);
         send = findViewById(R.id.img_send_image);
         mainImage = findViewById(R.id.main_image_view);
