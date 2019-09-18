@@ -44,7 +44,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
 
-        <activity android:name="com.tmt.livechat.screens.sendfile.SendFileActivity"
+        <activity android:name="com.tmt.livechat.screens.sendfile.view.SendFileActivity"
             android:configChanges="screenSize|keyboardHidden|screenLayout"
             android:theme="@style/ChatTheme"
             android:windowSoftInputMode="stateHidden"
