@@ -58,7 +58,7 @@
             android:theme="@style/ChatTheme"/>
 
         <activity
-            android:name="com.tmt.livechat.screens.photoviewer.PhotoViewerActivity"
+            android:name="com.tmt.livechat.screens.photoviewer.view.PhotoViewerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"
             android:screenOrientation="portrait"
             android:theme="@style/ChatTheme"/>
