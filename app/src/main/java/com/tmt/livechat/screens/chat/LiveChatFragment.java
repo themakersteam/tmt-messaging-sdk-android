@@ -18,7 +18,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +43,7 @@ import com.tmt.livechat.connection_xmpp.interfaces.SendFileInterface;
 import com.tmt.livechat.connection_xmpp.interfaces.XmppChatCallbacks;
 import com.tmt.livechat.model.Theme;
 import com.tmt.livechat.model.UserMessage;
+import com.tmt.livechat.screens.chat.activity.view.LiveChatActivity;
 import com.tmt.livechat.screens.chat.adapters.FileOptionsBottomSheetAdapter;
 import com.tmt.livechat.screens.chat.adapters.LiveChatAdapter;
 import com.tmt.livechat.screens.mylocation.view.MyLocationActivity;
@@ -55,10 +55,8 @@ import com.tmt.livechat.utils.DownloadUtils;
 import com.tmt.livechat.utils.FileUtils;
 import com.tmt.livechat.utils.LoadingUtils;
 import com.tmt.livechat.utils.LocationUtils;
-
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import java.io.File;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 
@@ -71,9 +69,6 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
     private static final int PERMISSION_CALL = 15;
     private static final int SEND_FILE_ACTIVITY_RESULT = 101;
     private static final int OPEN_LOCATION_ACTIVITY_RESULT = 102;
-
-    private InputMethodManager mIMM;
-    private HashMap<String, Boolean> inProgressMessages;
 
     private RelativeLayout mRootLayout;
     private FileOptionsBottomSheetAdapter mBottomSheetAdapter;
@@ -119,9 +114,6 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
         setUpChatListAdapter();
         xmppClient.onCreate(getContext(), this, chatId);
         loadingUtils = new LoadingUtils(getActivity());
-
-        mIMM = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inProgressMessages = new HashMap<>();
 
 
         // Load messages from cache.
@@ -473,24 +465,6 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
         mChatAdapter.setItemClickListener(this);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        ((LiveChatActivity)context).setOnBackPressedListener(new LiveChatActivity.onBackPressedListener() {
-            @Override
-            public boolean onBack() {
-                if (inProgressMessages != null && inProgressMessages.size() > 0) {
-                    showInProgressMessageAlert();
-                    return true;
-                }
-                else {
-                    mIMM.hideSoftInputFromWindow(mMessageEditText.getWindowToken(), 0);
-                    return false;
-                }
-            }
-        });
-    }
-
     private void retryFailedMessage(final UserMessage message) {
         new AlertDialog.Builder(getActivity())
                 .setMessage(getString(R.string.retry))
@@ -629,7 +603,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
         if (path.equals("")) {
             Toast.makeText(getActivity(), getString(R.string.file_must_be_in_local_storage), Toast.LENGTH_LONG).show();
         } else {
-            inProgressMessages.put(file.getName(), false);
+            ((LiveChatActivity)getActivity()).addProgress(file.getName(), false);
             xmppClient.sendFileMessage(getContext(), file, caption,  new SendFileInterface() {
                 @Override
                 public void onReady(final UserMessage userMessage) {
@@ -659,10 +633,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                inProgressMessages.remove(file.getName());
-                            }
-                            catch (Exception activity_is_killed) {}
+                            ((LiveChatActivity)getActivity()).removeProgress(file.getName());
                             if (getActivity() != null && isVisible()) {
                                 mChatAdapter.setFileProgressPercent(message, 100);
                                 if (e != null) {
@@ -676,24 +647,6 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
                 }
             });
         }
-    }
-
-    private void showInProgressMessageAlert() {
-        try {
-            new AlertDialog.Builder(getContext()).setMessage(getString(R.string.ms_message_file_in_progress))
-                    .setNegativeButton(getString(R.string.ms_message_failed_no), null)
-                    .setPositiveButton(getString(R.string.ms_message_failed_yes), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (inProgressMessages != null) {
-                                inProgressMessages.clear();
-                            }
-                            getActivity().onBackPressed();
-                        }
-                    })
-                    .create().show();
-        }
-        catch (Exception e) {}
     }
 
     private void showSettingsPermissionSnack(String message) {

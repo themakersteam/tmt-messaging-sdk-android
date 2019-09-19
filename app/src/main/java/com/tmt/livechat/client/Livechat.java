@@ -11,7 +11,7 @@ import com.tmt.livechat.connection_xmpp.storage.ReceiptStorage;
 import com.tmt.livechat.model.ConnectionRequest;
 import com.tmt.livechat.model.Theme;
 import com.tmt.livechat.model.UserMessage;
-import com.tmt.livechat.screens.chat.LiveChatActivity;
+import com.tmt.livechat.screens.chat.activity.view.LiveChatActivity;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smackx.mam.MamManager;

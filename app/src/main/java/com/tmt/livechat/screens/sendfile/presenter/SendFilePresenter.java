@@ -7,7 +7,7 @@ import android.provider.MediaStore;
 import androidx.core.content.FileProvider;
 import com.tmt.livechat.screens.abstraction.activity.BaseActivity;
 import com.tmt.livechat.screens.abstraction.mvp.MvpPresenter;
-import com.tmt.livechat.screens.chat.LiveChatActivity;
+import com.tmt.livechat.screens.chat.activity.view.LiveChatActivity;
 import com.tmt.livechat.screens.sendfile.SendFileInterface;
 import com.tmt.livechat.utils.FileUtils;
 import com.tmt.livechat.utils.ImageUtils;
