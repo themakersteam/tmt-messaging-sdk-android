@@ -56,7 +56,7 @@ public class XmppClient implements XmppClientInterface {
         this.context = context;
         if (chatCallbacks != null) {
             this.chatCallbacks = chatCallbacks;
-            if (Livechat.instance().getConnection() == null)
+            if (Livechat.instance().getConnection() == null || context == null)
                 chatCallbacks.onConnectionError(ChatErrorCodes.NULL_CONNECTION, new Exception("Connection is null"));
             else {
                 setupResourcePart();
