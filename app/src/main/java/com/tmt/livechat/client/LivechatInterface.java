@@ -15,6 +15,7 @@ abstract class LivechatInterface {
 
     abstract public void connect(ConnectionRequest connectionRequest, ConnectionInterface connectionInterface);
     abstract public boolean isConnected();
+    abstract public boolean isPresented();
     abstract public XMPPTCPConnection getConnection();
     abstract public void openChatView(Activity context, OpenChatRequest openChatRequest, Theme theme, OpenChatInterface openChatInterface);
     abstract public void getUnreadMessageCount(Context context, String chat_id, UnreadCountInterface unreadCountInterface);

@@ -129,7 +129,17 @@
     ```bash
     Livechat.isConnected();
     ```
+    
+#### 4.5 isPresented()
 
-#### 4.5 disconnect()
+ * returns true if Message Center is presented to the user
+ * Used for notifications, don't show notification when its presented 
+
+ * Sample code for checking connection
+    ```bash
+    Livechat.isPresented();
+    ```
+    
+#### 4.6 disconnect()
 
  * Disconnects the chat services, best case to use if with user logout

@@ -13,6 +13,7 @@ import com.tmt.livechat.model.ConnectionRequest;
 import com.tmt.livechat.model.OpenChatRequest;
 import com.tmt.livechat.model.Theme;
 import com.tmt.livechat.model.UserMessage;
+import com.tmt.livechat.screens.abstraction.activity.BaseActivity;
 import com.tmt.livechat.screens.chat.activity.view.LiveChatActivity;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
@@ -39,6 +40,11 @@ public class Livechat extends LivechatInterface {
     @Override
     public boolean isConnected() {
         return getConnection() != null && getConnection().isConnected() && getConnection().isAuthenticated();
+    }
+
+    @Override
+    public boolean isPresented() {
+        return BaseActivity.IS_PRESENTED;
     }
 
     @Override
