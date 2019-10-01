@@ -2,9 +2,12 @@ package com.tmt.livechat.connection_xmpp.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.tmt.livechat.connection_xmpp.network.networkCallbacks.EmptyCallback;
 import com.tmt.livechat.connection_xmpp.network.requests.ProgressRequestBody;
+import com.tmt.livechat.model.UserMessage;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -22,8 +25,21 @@ public class XmppNetwork {
 
     private static XmppNetwork xmppNetwork;
 
+    private String username;
+    private String password;
+
     public XmppNetwork() {
         xmppNetworkApiInterface = getClient().create(XmppNetworkApiInterface.class);
+    }
+
+    /**
+     *
+     * @param username
+     * @param password
+     */
+    public void setUsernameAndPassword(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     /**
@@ -36,6 +52,19 @@ public class XmppNetwork {
     public void uploadImage(File file,String md5,  String url, Callback<Void> callback, ProgressRequestBody.UploadCallbacks callbacks) {
         ProgressRequestBody requestFile = new ProgressRequestBody(file, callbacks);
         xmppNetworkApiInterface.uploadImage(md5, url, requestFile).enqueue(callback);
+    }
+
+    /**
+     *
+     * @param url
+     * @param room_id
+     * @param userMessage
+     */
+    public void sendNotification(String url, String room_id,  UserMessage userMessage) {
+        if (url != null && !url.isEmpty()) {
+            String auth = Credentials.basic(username, password);
+            xmppNetworkApiInterface.sendNotification(auth, url, userMessage.getNotificationRequest(room_id)).enqueue(new EmptyCallback<Void>());
+        }
     }
 
     /**

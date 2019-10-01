@@ -1,9 +1,12 @@
 package com.tmt.livechat.model;
 
 import com.tmt.livechat.connection_xmpp.constants.DeliveryReceiptStatus;
+import com.tmt.livechat.connection_xmpp.constants.MessageTypeStatus;
 import com.tmt.livechat.connection_xmpp.extensions.DataExtension;
 import com.tmt.livechat.connection_xmpp.extensions.FileExtension;
 import com.tmt.livechat.connection_xmpp.extensions.LocationExtension;
+import com.tmt.livechat.connection_xmpp.network.requests.SendNotificationBody;
+
 import org.jivesoftware.smack.packet.Message;
 
 /**
@@ -67,5 +70,29 @@ public class UserMessage {
 
     public String getStatus() {
         return status;
+    }
+
+    /**
+     *
+     * @param room_id
+     * @return
+     */
+    public SendNotificationBody getNotificationRequest(String room_id) {
+        SendNotificationBody sendNotificationBody = new SendNotificationBody();
+        sendNotificationBody.setRoomId(room_id);
+        if (!isFile() && !isLocation()) {
+            sendNotificationBody.setMessage(message.getBody());
+            sendNotificationBody.setType(MessageTypeStatus.TEXT);
+        }
+        else if (isLocation()) {
+            sendNotificationBody.setType(MessageTypeStatus.LOCATION);
+        }
+        else if (isFile()) {
+            if (getFile().getContentType().contains("image"))
+                sendNotificationBody.setType(MessageTypeStatus.IMAGE);
+            else if (getFile().getContentType().contains("3gp") || getFile().getContentType().contains("audio"))
+                sendNotificationBody.setType(MessageTypeStatus.AUDIO);
+        }
+        return sendNotificationBody;
     }
 }

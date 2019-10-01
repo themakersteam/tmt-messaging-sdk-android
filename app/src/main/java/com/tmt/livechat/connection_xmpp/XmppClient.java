@@ -11,7 +11,9 @@ import com.tmt.livechat.connection_xmpp.interfaces.SendFileInterface;
 import com.tmt.livechat.connection_xmpp.interfaces.XmppChatCallbacks;
 import com.tmt.livechat.connection_xmpp.interfaces.XmppClientInterface;
 import com.tmt.livechat.connection_xmpp.manegers.S3FileUploadManager;
+import com.tmt.livechat.connection_xmpp.network.XmppNetwork;
 import com.tmt.livechat.connection_xmpp.storage.ReceiptStorage;
+import com.tmt.livechat.model.OpenChatRequest;
 import com.tmt.livechat.model.UserMessage;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.MessageListener;
@@ -47,13 +49,15 @@ public class XmppClient implements XmppClientInterface {
     private XmppChatCallbacks chatCallbacks;
     private Resourcepart resourcepart;
     private String lastPageUUID;
+    private OpenChatRequest chatRequest;
     private Context context;
 
     private int connection_retries = 0;
 
     @Override
-    public void onCreate(Context context, final XmppChatCallbacks chatCallbacks, String chatId) {
+    public void onCreate(Context context, final XmppChatCallbacks chatCallbacks, OpenChatRequest chatRequest) {
         this.context = context;
+        this.chatRequest = chatRequest;
         if (chatCallbacks != null) {
             this.chatCallbacks = chatCallbacks;
             if (Livechat.instance().getConnection() == null)
@@ -62,7 +66,7 @@ public class XmppClient implements XmppClientInterface {
                 setupResourcePart();
                 registerStanzaFilter();
                 registerConnectionListener();
-                joinRoom(chatId);
+                joinRoom(chatRequest.getChatId());
             }
         }
     }
@@ -262,8 +266,10 @@ public class XmppClient implements XmppClientInterface {
                 }
                 else if (message.getBody() != null && !isMyMessage(message.getFrom()))
                     chatCallbacks.newIncomingMessage(new UserMessage(message));
-                else if (isMyMessage(message.getFrom()) && message.getBody() != null)
+                else if (isMyMessage(message.getFrom()) && message.getBody() != null) {
                     chatCallbacks.onMessageStatusUpdated(message.getStanzaId(), DeliveryReceiptStatus.RECEIVED);
+                    XmppNetwork.instance().sendNotification(chatRequest.getServiceUrl(), chatRequest.getChatId(), new UserMessage(message));
+                }
             }
         });
     }

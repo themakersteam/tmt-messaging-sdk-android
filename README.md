@@ -109,10 +109,10 @@
  * if chat_id must be provided
 
 #### 4.3 openChatView()
- * Joining the chat by url(id) provided
+ * Joining the chat by openChatViewRequest(service_url, chat_id) provided
  * Sample code for joining a conversation
     ```bash
-    Livechat.openChatView(Activity: this, chat_id: "sample_chat_id", theme: new Theme(toolbar: "title", toolbar_subtitle: "subtitle"), openChatViewInterface: OpenChatViewInterface);
+    Livechat.openChatView(Activity: this, chat_id: new OpenChatRequest("service_url","sample_chat_id"), theme: new Theme(toolbar: "title", toolbar_subtitle: "subtitle"), openChatViewInterface: OpenChatViewInterface);
     ```
     
  * if Theme object is not provided, the app will take the defaults

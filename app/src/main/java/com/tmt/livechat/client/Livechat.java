@@ -7,8 +7,10 @@ import com.tmt.livechat.client.interfaces.ConnectionInterface;
 import com.tmt.livechat.client.interfaces.OpenChatInterface;
 import com.tmt.livechat.client.interfaces.UnreadCountInterface;
 import com.tmt.livechat.connection_xmpp.XmppConnectionTask;
+import com.tmt.livechat.connection_xmpp.network.XmppNetwork;
 import com.tmt.livechat.connection_xmpp.storage.ReceiptStorage;
 import com.tmt.livechat.model.ConnectionRequest;
+import com.tmt.livechat.model.OpenChatRequest;
 import com.tmt.livechat.model.Theme;
 import com.tmt.livechat.model.UserMessage;
 import com.tmt.livechat.screens.chat.activity.view.LiveChatActivity;
@@ -29,6 +31,7 @@ public class Livechat extends LivechatInterface {
 
     @Override
     public void connect(ConnectionRequest connectionRequest, ConnectionInterface connectionInterface) {
+        XmppNetwork.instance().setUsernameAndPassword(connectionRequest.getUsername(), connectionRequest.getPassword());
         xmppConnectionTask = new XmppConnectionTask(connectionRequest, connectionInterface);
         xmppConnectionTask.execute();
     }
@@ -44,10 +47,10 @@ public class Livechat extends LivechatInterface {
     }
 
     @Override
-    public void openChatView(Activity context, String chat_id, Theme theme, OpenChatInterface openChatInterface) {
+    public void openChatView(Activity context, OpenChatRequest openChatRequest, Theme theme, OpenChatInterface openChatInterface) {
         if (isConnected()) {
+            openChatActivity(context, openChatRequest, theme);
             openChatInterface.screenWillLaunch();
-            openChatActivity(context, chat_id, theme);
         }
         else {
             if (openChatInterface != null)
@@ -88,15 +91,15 @@ public class Livechat extends LivechatInterface {
     /**
      *
      * @param context
-     * @param chat_url
+     * @param openChatRequest
      * @param theme
      */
-    private void openChatActivity(Activity context, String chat_url, Theme theme) {
+    private void openChatActivity(Activity context, OpenChatRequest openChatRequest, Theme theme) {
         Intent a1 = new Intent(context, LiveChatActivity.class);
         if (theme != null) {
             a1.putExtra("THEME", theme);
         }
-        a1.putExtra("URL", chat_url);
+        a1.putExtra("CHAT", openChatRequest);
         a1.putExtra("PACKAGE_NAME", context.getPackageName());
         context.startActivityForResult(a1, Livechat.OPEN_CHAT_VIEW_REQUEST_CODE);
     }
