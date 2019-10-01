@@ -7,6 +7,7 @@ import com.tmt.livechat.client.Livechat;
 import com.tmt.livechat.client.interfaces.ConnectionInterface;
 import com.tmt.livechat.client.interfaces.OpenChatInterface;
 import com.tmt.livechat.model.ConnectionRequest;
+import com.tmt.livechat.model.OpenChatRequest;
 import com.tmt.livechat.model.Theme;
 
 public class TestActivity extends AppCompatActivity {
@@ -27,7 +28,8 @@ public class TestActivity extends AppCompatActivity {
         Livechat.instance().connect(connectionRequest, new ConnectionInterface() {
             @Override
             public void onConnected() {
-                Livechat.instance().openChatView(TestActivity.this, "test-room-nabil@conference.tmt-test.m.in-app.io", theme, new OpenChatInterface() {
+                OpenChatRequest openChatRequest = new OpenChatRequest(null, "test-room-nabil@conference.tmt-test.m.in-app.io");
+                Livechat.instance().openChatView(TestActivity.this, openChatRequest, theme, new OpenChatInterface() {
                     @Override
                     public void screenWillLaunch() {
 

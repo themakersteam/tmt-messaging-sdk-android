@@ -41,6 +41,7 @@ import com.tmt.livechat.connection_xmpp.XmppClient;
 import com.tmt.livechat.connection_xmpp.constants.DeliveryReceiptStatus;
 import com.tmt.livechat.connection_xmpp.interfaces.SendFileInterface;
 import com.tmt.livechat.connection_xmpp.interfaces.XmppChatCallbacks;
+import com.tmt.livechat.model.OpenChatRequest;
 import com.tmt.livechat.model.Theme;
 import com.tmt.livechat.model.UserMessage;
 import com.tmt.livechat.screens.chat.activity.view.LiveChatActivity;
@@ -86,7 +87,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
     private TextView mCurrentEventText;
     private TextView welcomeMessage;
     private Theme theme;
-    private String chatId;
+    private OpenChatRequest openChatRequest;
     private boolean screenVisable = true;
 
     private boolean showWelcome = true;
@@ -108,11 +109,11 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        chatId = getArguments().getString("URL");
+        openChatRequest = getArguments().getParcelable("CHAT");
         xmppClient = new XmppClient();
         mChatAdapter = new LiveChatAdapter(getActivity(), xmppClient);
         setUpChatListAdapter();
-        xmppClient.onCreate(getContext(), this, chatId);
+        xmppClient.onCreate(getContext(), this, openChatRequest);
         loadingUtils = new LoadingUtils(getActivity());
 
 

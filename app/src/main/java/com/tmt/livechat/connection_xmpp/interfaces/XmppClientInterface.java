@@ -1,6 +1,8 @@
 package com.tmt.livechat.connection_xmpp.interfaces;
 
 import android.content.Context;
+
+import com.tmt.livechat.model.OpenChatRequest;
 import com.tmt.livechat.model.UserMessage;
 import org.jxmpp.jid.Jid;
 import java.io.File;
@@ -10,7 +12,7 @@ import java.util.List;
  * Created by mohammednabil on 2019-09-05.
  */
 public interface XmppClientInterface {
-    void onCreate(Context context, final XmppChatCallbacks xmppChatCallbacks, String chatId);
+    void onCreate(Context context, final XmppChatCallbacks xmppChatCallbacks, OpenChatRequest chatRequest);
     void setTypingStatus(boolean typing);
     boolean isMyMessage(Jid from);
     void sendUserMessage(String message_);
