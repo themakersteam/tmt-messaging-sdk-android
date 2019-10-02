@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.Editable;
@@ -253,7 +254,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
 
     @Override
     public void onConnectionError(int code, Exception e) {
-        getActivity().runOnUiThread(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(getContext(), getString(R.string.ms_connection_failed), Toast.LENGTH_SHORT).show();
@@ -264,7 +265,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
 
     @Override
     public void reconnecting() {
-        getActivity().runOnUiThread(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 loadingUtils.showOnScreenLoading();
@@ -274,7 +275,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
 
     @Override
     public void reconnected() {
-        getActivity().runOnUiThread(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 loadingUtils.hideOnScreenLoading();
@@ -284,7 +285,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
 
     @Override
     public void newIncomingMessage(final UserMessage message) {
-        getActivity().runOnUiThread(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 ((Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE)).vibrate(150);
@@ -297,7 +298,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
 
     @Override
     public void sendingMessage(final UserMessage userMessage) {
-        getActivity().runOnUiThread(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 mChatAdapter.addFirst(userMessage);
@@ -308,7 +309,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
 
     @Override
     public void onTypingStatusUpdated(final boolean isTyping,final String from) {
-        getActivity().runOnUiThread(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 mCurrentEventLayout.setVisibility(isTyping ? View.VISIBLE : View.GONE);
@@ -339,7 +340,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
 
     @Override
     public void onMessageStatusUpdated(final String id, final String status) {
-        getActivity().runOnUiThread(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 mChatAdapter.updateStatus(id, status);
@@ -349,7 +350,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
 
     @Override
     public void seenStampReceived(final String room_id) {
-        getActivity().runOnUiThread(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 mChatAdapter.updateStatus(room_id);
@@ -608,7 +609,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
             xmppClient.sendFileMessage(getContext(), file, caption,  new SendFileInterface() {
                 @Override
                 public void onReady(final UserMessage userMessage) {
-                    getActivity().runOnUiThread(new Runnable() {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
                             mChatAdapter.addFirst(userMessage);
@@ -620,7 +621,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
                 @Override
                 public void onProgress(final UserMessage userMessage,final int parentage) {
                     if (getActivity() != null && isVisible()) {
-                        getActivity().runOnUiThread(new Runnable() {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
                                 mChatAdapter.setFileProgressPercent(userMessage, parentage);
@@ -631,7 +632,7 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
 
                 @Override
                 public void onSent(final UserMessage message,final Exception e) {
-                    getActivity().runOnUiThread(new Runnable() {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
                             ((LiveChatActivity)getActivity()).removeProgress(file.getName());
