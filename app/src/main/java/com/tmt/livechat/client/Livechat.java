@@ -28,11 +28,13 @@ public class Livechat extends LivechatInterface {
     private static Livechat livechat;
     public static final Integer OPEN_CHAT_VIEW_REQUEST_CODE = 234;
     public static final Integer OPEN_CHAT_VIEW_RESPONSE_CODE = 232;
+    private static String myUserName;
     private XmppConnectionTask xmppConnectionTask;
 
     @Override
     public void connect(ConnectionRequest connectionRequest, ConnectionInterface connectionInterface) {
         XmppNetwork.instance().setUsernameAndPassword(connectionRequest.getUsername(), connectionRequest.getPassword());
+        myUserName = connectionRequest.getUsername();
         xmppConnectionTask = new XmppConnectionTask(connectionRequest, connectionInterface);
         xmppConnectionTask.execute();
     }
@@ -77,8 +79,10 @@ public class Livechat extends LivechatInterface {
             int count = 0;
             for (Message message : mamQuery.getMessages()) {
                 UserMessage userMessage = new UserMessage(message);
-                if (userMessage.getTimeStamp() > new ReceiptStorage(context).getLastReceivedSeenStamp(chat_id)) {
-                    count++;
+                if (myUserName != null && !userMessage.getMessage().getFrom().getResourceOrEmpty().toString().equals(myUserName)) {
+                    if (userMessage.getTimeStamp() > new ReceiptStorage(context).getLastReceivedSeenStamp(chat_id)) {
+                        count++;
+                    }
                 }
             }
             unreadCountInterface.onUnreadMessageCount(count);
@@ -90,6 +94,7 @@ public class Livechat extends LivechatInterface {
 
     @Override
     public void disconnect() {
+        myUserName = null;
         if (isConnected())
             getConnection().disconnect();
     }
