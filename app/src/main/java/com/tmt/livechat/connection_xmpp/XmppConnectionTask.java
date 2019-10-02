@@ -10,14 +10,12 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.ReconnectionManager;
 import org.jivesoftware.smack.SASLAuthentication;
-import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
-import org.jivesoftware.smackx.ping.PingManager;
 import org.jxmpp.jid.DomainBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
@@ -42,7 +40,9 @@ public class XmppConnectionTask extends AsyncTask<String, Void, Void> {
         return mConnection;
     }
 
-    protected Void doInBackground(String... urls) {
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
         DomainBareJid domainBareJid = null;
         try {
             domainBareJid= JidCreate.domainBareFrom(connectionRequest.getDomain());
@@ -65,9 +65,7 @@ public class XmppConnectionTask extends AsyncTask<String, Void, Void> {
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled) //Disable or enable as per development mode
                 .build(); // to view what's happening in detail
 
-
         mConnection = new XMPPTCPConnection(config);
-
         ReconnectionManager.setEnabledPerDefault(true);
         ProviderManager.addExtensionProvider(DataExtension.ELEMENT, DataExtension.NAMESPACE, new DataExtension.Provider());
         ProviderManager.addExtensionProvider(SeenReceiptExtension.ELEMENT, SeenReceiptExtension.NAMESPACE, new SeenReceiptExtension.Provider());
@@ -88,19 +86,10 @@ public class XmppConnectionTask extends AsyncTask<String, Void, Void> {
                 catch (XMPPException | SmackException | IOException | InterruptedException e) {
                     connectionInterface.onConnectionError(ChatErrorCodes.CONNECTION_ERROR, e);
                 }
-                mConnection.removeConnectionListener(this);
             }
             @Override
             public void authenticated(XMPPConnection connection, boolean resumed) {
                 connectionInterface.onConnected();
-                mConnection.removeConnectionListener(this);
-                try {
-                    PingManager.getInstanceFor(mConnection).setPingInterval(60) ;
-                    PingManager.getInstanceFor(mConnection).pingMyServer();
-                }
-                catch (SmackException.NotConnectedException  | InterruptedException e) {
-
-                }
             }
 
             @Override
@@ -113,6 +102,10 @@ public class XmppConnectionTask extends AsyncTask<String, Void, Void> {
             }
         });
 
+    }
+
+    @Override
+    protected Void doInBackground(String... strings) {
         try {
             mConnection.connect();
         } catch (XMPPException | SmackException | IOException | InterruptedException e) {
@@ -121,7 +114,4 @@ public class XmppConnectionTask extends AsyncTask<String, Void, Void> {
         return null;
     }
 
-    protected void onPostExecute(Void feed) {
-
-    }
 }
