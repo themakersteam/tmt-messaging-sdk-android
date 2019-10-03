@@ -80,6 +80,9 @@ public class UserMessage {
     public SendNotificationBody getNotificationRequest(String room_id) {
         SendNotificationBody sendNotificationBody = new SendNotificationBody();
         sendNotificationBody.setRoomId(room_id);
+        sendNotificationBody.setId(message != null && message.getStanzaId() != null ? message.getStanzaId() : null);
+        sendNotificationBody.setMessageAt(getTimeStamp());
+        sendNotificationBody.setPlatform("android");
         if (!isFile() && !isLocation()) {
             sendNotificationBody.setMessage(message.getBody());
             sendNotificationBody.setType(MessageTypeStatus.TEXT);

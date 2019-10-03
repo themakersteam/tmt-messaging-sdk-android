@@ -1,6 +1,7 @@
 package com.tmt.livechat.connection_xmpp;
 
 import android.content.Context;
+import android.os.Handler;
 import com.tmt.livechat.connection_xmpp.constants.ChatErrorCodes;
 import com.tmt.livechat.connection_xmpp.constants.DeliveryReceiptStatus;
 import com.tmt.livechat.connection_xmpp.extensions.DataExtension;
@@ -43,7 +44,7 @@ import java.util.List;
 /**
  * Created by mohammednabil on 2019-09-03.
  */
-public class XmppClient implements XmppClientInterface {
+public class XmppClient implements XmppClientInterface, StanzaListener, ReconnectionListener, ConnectionListener, MessageListener {
 
     private MultiUserChat chat;
     private XmppChatCallbacks chatCallbacks;
@@ -194,6 +195,80 @@ public class XmppClient implements XmppClientInterface {
         chatCallbacks.onMessageStatusUpdated(id, status);
     }
 
+    @Override
+    public void processStanza(Stanza packet) throws SmackException.NotConnectedException, InterruptedException, SmackException.NotLoggedInException {
+        if (packet.getError() != null && packet.getExtension(DataExtension.NAMESPACE) != null) {
+            messageStatusUpdated(packet.getStanzaId(), DeliveryReceiptStatus.FAILED);
+        }
+        else if (packet.getExtension(ChatStateExtension.NAMESPACE) != null && !isMyMessage(packet.getFrom())) {
+            if (packet.getExtension(ChatStateExtension.NAMESPACE).getElementName().equals(ChatState.paused.name()))
+                chatCallbacks.onTypingStatusUpdated(false, null);
+            else if (packet.getExtension(ChatStateExtension.NAMESPACE).getElementName().equals(ChatState.composing.name()))
+                chatCallbacks.onTypingStatusUpdated(true, packet.getFrom().getResourceOrEmpty().toString());
+        }
+        else if (packet.getExtension(SeenReceiptExtension.NAMESPACE) != null && !isMyMessage(packet.getFrom())) {
+            new ReceiptStorage(context).setLastReceivedSeenStamp(chat.getRoom().asEntityBareJidString(), System.currentTimeMillis());
+            chatCallbacks.seenStampReceived(chat.getRoom().asEntityBareJidString());
+        }
+    }
+
+    @Override
+    public void processMessage(Message message) {
+        if (message.getExtension(SeenReceiptExtension.NAMESPACE) != null) {
+
+        }
+        else if (message.getBody() != null && !isMyMessage(message.getFrom()))
+            chatCallbacks.newIncomingMessage(new UserMessage(message));
+        else if (isMyMessage(message.getFrom()) && message.getBody() != null) {
+            chatCallbacks.onMessageStatusUpdated(message.getStanzaId(), DeliveryReceiptStatus.RECEIVED);
+            XmppNetwork.instance().sendNotification(chatRequest.getServiceUrl(), chatRequest.getChatId(), new UserMessage(message));
+        }
+    }
+
+    @Override
+    public void connected(XMPPConnection connection) {
+
+    }
+
+    @Override
+    public void authenticated(XMPPConnection connection, boolean resumed) {
+        chatCallbacks.reconnected();
+        connection_retries = 0;
+    }
+
+    @Override
+    public void reconnectingIn(int seconds) {
+
+    }
+
+    @Override
+    public void reconnectionFailed(Exception e) {
+        if (connection_retries == 2)
+            chatCallbacks.onConnectionError(ChatErrorCodes.THREE_CONNECTIONS_FAILURE, null);
+        connection_retries++;
+    }
+
+    @Override
+    public void connectionClosedOnError(Exception e) {
+        chatCallbacks.reconnecting();
+    }
+
+    @Override
+    public void connectionClosed() {
+        chatCallbacks.onConnectionError(ChatErrorCodes.CONNECTION_ERROR, null);
+    }
+
+    @Override
+    public void onDestroy() {
+        try {
+            Livechat.instance().getConnection().removeAsyncStanzaListener(this);
+            ReconnectionManager.getInstanceFor(Livechat.instance().getConnection()).removeReconnectionListener(this);
+            Livechat.instance().getConnection().removeConnectionListener(this);
+            chat.removeMessageListener(this);
+        }
+        catch (Exception e){}
+    }
+
     private void setupResourcePart() {
         try {
             resourcepart = Resourcepart.from(Livechat.instance().getConnection().getUser().asEntityBareJid().getLocalpart().toString());
@@ -202,76 +277,17 @@ public class XmppClient implements XmppClientInterface {
     }
 
     private void registerStanzaFilter() {
-        Livechat.instance().getConnection().addAsyncStanzaListener(new StanzaListener() {
-            @Override
-            public void processStanza(Stanza packet) {
-                if (packet.getError() != null && packet.getExtension(DataExtension.NAMESPACE) != null) {
-                    messageStatusUpdated(packet.getStanzaId(), DeliveryReceiptStatus.FAILED);
-                }
-                else if (packet.getExtension(ChatStateExtension.NAMESPACE) != null && !isMyMessage(packet.getFrom())) {
-                    if (packet.getExtension(ChatStateExtension.NAMESPACE).getElementName().equals(ChatState.paused.name()))
-                        chatCallbacks.onTypingStatusUpdated(false, null);
-                    else if (packet.getExtension(ChatStateExtension.NAMESPACE).getElementName().equals(ChatState.composing.name()))
-                        chatCallbacks.onTypingStatusUpdated(true, packet.getFrom().getResourceOrEmpty().toString());
-                }
-                else if (packet.getExtension(SeenReceiptExtension.NAMESPACE) != null && !isMyMessage(packet.getFrom())) {
-                    new ReceiptStorage(context).setLastReceivedSeenStamp(chat.getRoom().asEntityBareJidString(), System.currentTimeMillis());
-                    chatCallbacks.seenStampReceived(chat.getRoom().asEntityBareJidString());
-                }
-            }
-        }, new StanzaTypeFilter(Message.class));
+        Livechat.instance().getConnection().addAsyncStanzaListener(this, new StanzaTypeFilter(Message.class));
 
     }
 
     private void registerConnectionListener() {
-        ReconnectionManager.getInstanceFor(Livechat.instance().getConnection()).addReconnectionListener(new ReconnectionListener() {
-            @Override
-            public void reconnectingIn(int seconds) {
-            }
-
-            @Override
-            public void reconnectionFailed(Exception e) {
-                if (connection_retries == 2)
-                    chatCallbacks.onConnectionError(ChatErrorCodes.THREE_CONNECTIONS_FAILURE, null);
-                connection_retries++;
-            }
-        });
-        Livechat.instance().getConnection().addConnectionListener(new ConnectionListener() {
-            @Override
-            public void connected(XMPPConnection connection) {
-            }
-            @Override
-            public void authenticated(XMPPConnection connection, boolean resumed) {
-                chatCallbacks.reconnected();
-                connection_retries = 0;
-            }
-            @Override
-            public void connectionClosed() {
-                chatCallbacks.onConnectionError(ChatErrorCodes.CONNECTION_ERROR, null);
-            }
-
-            @Override
-            public void connectionClosedOnError(Exception e) {
-                chatCallbacks.reconnecting();
-            }
-        });
+        ReconnectionManager.getInstanceFor(Livechat.instance().getConnection()).addReconnectionListener(this);
+        Livechat.instance().getConnection().addConnectionListener(this);
     }
 
     private void registerIncomingMessageReceiver() {
-        chat.addMessageListener(new MessageListener() {
-            @Override
-            public void processMessage(Message message) {
-                if (message.getExtension(SeenReceiptExtension.NAMESPACE) != null) {
-
-                }
-                else if (message.getBody() != null && !isMyMessage(message.getFrom()))
-                    chatCallbacks.newIncomingMessage(new UserMessage(message));
-                else if (isMyMessage(message.getFrom()) && message.getBody() != null) {
-                    chatCallbacks.onMessageStatusUpdated(message.getStanzaId(), DeliveryReceiptStatus.RECEIVED);
-                    XmppNetwork.instance().sendNotification(chatRequest.getServiceUrl(), chatRequest.getChatId(), new UserMessage(message));
-                }
-            }
-        });
+        chat.addMessageListener(this);
     }
 
     private void joinRoom(String chat_id) {
@@ -280,14 +296,24 @@ public class XmppClient implements XmppClientInterface {
             chat = MultiUserChatManager.getInstanceFor(Livechat.instance().getConnection()).getMultiUserChat(jid);
             MultiUserChatManager.getInstanceFor(Livechat.instance().getConnection()).setAutoJoinOnReconnect(true);
             try {
-                MucEnterConfiguration.Builder v= chat.getEnterConfigurationBuilder(resourcepart);
+                final MucEnterConfiguration.Builder v= chat.getEnterConfigurationBuilder(resourcepart);
                 v.requestNoHistory();
-                chat.join(v.build());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            chat.join(v.build());
+                            registerIncomingMessageReceiver();
+                        }
+                        catch (Exception e) {
+                            chatCallbacks.onConnectionError(ChatErrorCodes.INVALID_ROOM, e);
+                        }
+                    }
+                }, 1000);
             }
             catch (Exception e){
                 chatCallbacks.onConnectionError(ChatErrorCodes.INVALID_ROOM, e);
             }
-            registerIncomingMessageReceiver();
             chatCallbacks.onChatReady(chat);
         }
         catch (XmppStringprepException e) {

@@ -386,6 +386,8 @@ public class LiveChatFragment extends Fragment implements XmppChatCallbacks, Liv
 
     @Override
     public void onDestroy() {
+        if (xmppClient != null)
+            xmppClient.onDestroy();
         screenVisable = false;
         AudioPlayerUtils.destroy();
         super.onDestroy();

@@ -7,12 +7,27 @@ import com.google.gson.annotations.SerializedName;
  */
 public class SendNotificationBody {
 
+    @SerializedName("id")
+    private String id = null;
     @SerializedName("message")
     private String message = null;
+    @SerializedName("message_at")
+    private Long message_at = null;
     @SerializedName("type")
     private String type = null;
     @SerializedName("room_id")
     private String room_id = null;
+    @SerializedName("platform")
+    private String platform = null;
+
+    /**
+     **/
+    public void setId(String id) {
+        this.id = id;
+    }
+    public String getId() {
+        return id;
+    }
 
     /**
      **/
@@ -21,6 +36,15 @@ public class SendNotificationBody {
     }
     public String getMessage() {
         return message;
+    }
+
+    /**
+     **/
+    public void setMessageAt(Long message_at) {
+        this.message_at = message_at;
+    }
+    public Long getMessageAt() {
+        return message_at;
     }
 
     /**
@@ -39,5 +63,14 @@ public class SendNotificationBody {
     }
     public String getRoomId() {
         return room_id;
+    }
+
+    /**
+     **/
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+    public String getPlatform() {
+        return platform;
     }
 }

@@ -1,7 +1,6 @@
 package com.tmt.livechat.connection_xmpp.interfaces;
 
 import android.content.Context;
-
 import com.tmt.livechat.model.OpenChatRequest;
 import com.tmt.livechat.model.UserMessage;
 import org.jxmpp.jid.Jid;
@@ -21,4 +20,5 @@ public interface XmppClientInterface {
     void seenTheMessages();
     void messageStatusUpdated(String id, String status);
     List<UserMessage> loadPrevMessages(int page_limit);
+    void onDestroy();
 }
