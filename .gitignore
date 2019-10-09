@@ -12,6 +12,7 @@ out
 *.apk
 *.jks
 output.json
+google-services.json
 .idea/misc.xml
 idea/misc.xml
 report.xml

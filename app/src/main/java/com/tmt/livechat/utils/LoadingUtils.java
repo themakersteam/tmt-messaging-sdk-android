@@ -1,7 +1,7 @@
 package com.tmt.livechat.utils;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.view.KeyEvent;
@@ -9,10 +9,10 @@ import com.tmt.livechat.R;
 
 public class LoadingUtils {
 
-    private Activity context;
+    private Context context;
     private Dialog onScreenDialog;
 
-    public LoadingUtils(Activity context) {
+    public LoadingUtils(Context context) {
         this.context = context;
     }
 
@@ -41,7 +41,7 @@ public class LoadingUtils {
      *
      */
     public void hideOnScreenLoading() {
-        if (context != null && !context.isFinishing()) {
+        if (context != null) {
             if (onScreenDialog != null && onScreenDialog.isShowing())
                 try {onScreenDialog.dismiss();} catch (IllegalArgumentException e) {} //View not attached to window !
         }

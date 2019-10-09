@@ -2,19 +2,18 @@ package com.tmt.livechat.screens.chat.viewbinders;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.tmt.livechat.R;
-import com.tmt.livechat.model.UserMessage;
+import com.tmt.livechat.chat.clients.firestore.service.filedownload.FileDownloadService;
+import com.tmt.livechat.chat.clients.firestore.service.filedownload.FileDownloadServiceInterface;
+import com.tmt.livechat.chat.model.BaseMessage;
+import com.tmt.livechat.chat.model.FileMessage;
 import com.tmt.livechat.utils.AudioPlayerUtils;
 import com.tmt.livechat.utils.DateUtils;
-import com.tmt.livechat.utils.DownloadUtils;
-
 import java.io.File;
 
 /**
@@ -26,11 +25,9 @@ public class OtherAudioMessageHolder extends BaseViewBinder {
     ImageView mediaButton;
     TextView timeText;
     SeekBar seekBar;
-    private DownloadUtils downloadUtils;
 
-    public OtherAudioMessageHolder(View itemView, DownloadUtils downloadUtils) {
+    public OtherAudioMessageHolder(View itemView) {
         super(itemView);
-        this.downloadUtils = downloadUtils;
         mainLayout = itemView.findViewById(R.id.main_parent);
         timer = itemView.findViewById(R.id.tvTimer);
         mediaButton = itemView.findViewById(R.id.ivMedia);
@@ -38,20 +35,15 @@ public class OtherAudioMessageHolder extends BaseViewBinder {
         timeText = itemView.findViewById(R.id.text_group_chat_time);
     }
 
-    public void bind(final Context context, final UserMessage message) {
-        timeText.setText(message.getTimeStamp() != null ? DateUtils.formatTime(message.getTimeStamp()) : "");
+    public void bind(final Context context, final BaseMessage message) {
+        timeText.setText(message.getPosted_at() != null ? DateUtils.formatTime(message.getTimeInMillis()) : "");
         timeText.setTextColor(Color.parseColor("#9b9b9b"));
-        mediaButton.setTag(message.getFile().getId());
+        mediaButton.setTag("aud_" + message.getId());
         seekBar.setEnabled(false);
-        downloadUtils.downloadFile(message.getFile().getId(), new DownloadUtils.DownloadCallBacks() {
+        FileDownloadService.instance().downloadAndPrepare(context, (FileMessage) message, new FileDownloadServiceInterface.Callbacks() {
             @Override
             public void onFileReady(final File file) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        AudioPlayerUtils.setup(context, mediaButton, timer, seekBar, file);
-                    }
-                });
+                AudioPlayerUtils.setup(context, mediaButton, timer, seekBar, file);
             }
         });
     }

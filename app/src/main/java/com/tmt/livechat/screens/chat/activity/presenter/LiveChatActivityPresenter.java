@@ -5,9 +5,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import com.tmt.livechat.R;
-import com.tmt.livechat.model.Theme;
+import com.tmt.livechat.app_client.model.Theme;
 import com.tmt.livechat.screens.abstraction.mvp.MvpPresenter;
-import com.tmt.livechat.screens.chat.LiveChatFragment;
+import com.tmt.livechat.screens.chat.fragment.LiveChatFragment;
 import com.tmt.livechat.screens.chat.activity.LiveChatActivityInterface;
 import java.util.HashMap;
 

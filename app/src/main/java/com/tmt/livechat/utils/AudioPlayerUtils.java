@@ -127,7 +127,7 @@ public class AudioPlayerUtils {
     }
 
     private static boolean isPlayingForTag(String tag) {
-        return lastSelectedAudioPath != null && mediaPlayer != null && lastSelectedAudioPath.equals(tag);
+        return lastSelectedAudioPath != null && mediaPlayer != null && mediaPlayer.isPlaying() && lastSelectedAudioPath.equals(tag);
     }
 
     public static void destroy() {

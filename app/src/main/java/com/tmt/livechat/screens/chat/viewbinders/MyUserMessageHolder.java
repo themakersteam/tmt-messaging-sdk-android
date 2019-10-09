@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.tmt.livechat.R;
-import com.tmt.livechat.model.UserMessage;
+import com.tmt.livechat.chat.model.BaseMessage;
 import com.tmt.livechat.screens.chat.adapters.LiveChatAdapter;
 import com.tmt.livechat.utils.DateUtils;
 import com.tmt.livechat.utils.LocationUtils;
@@ -37,15 +37,15 @@ public class MyUserMessageHolder extends BaseViewBinder {
 
     }
 
-    public void bind(final Context context, final UserMessage message, final LiveChatAdapter.OnItemClickListener clickListener, final int position) {
+    public void bind(final Context context, final BaseMessage message, final LiveChatAdapter.OnItemClickListener clickListener, final int position) {
         String mMessage = LocationUtils.getLocationUrlMessageIfExists(message);
         messageText.setText(mMessage);
-        timeText.setText(message.getTimeStamp() != null ? DateUtils.formatTime(message.getTimeStamp()) : "");
+        timeText.setText(message.getPosted_at() != null ? DateUtils.formatTime(message.getTimeInMillis()) : "");
         timeText.setTextColor(Color.parseColor("#9b9b9b"));
 
         processReadReceipt(context, readReceipt, timeText, message);
         urlPreviewContainer.setVisibility(View.GONE);
-        if (message.isLocation()){
+        if (message.isLocationMessage()){
             try {
                 urlPreviewContainer.setVisibility(View.VISIBLE);
                 Glide.with(context).load(R.drawable.map_place_holder).into(urlPreviewMainImageView);

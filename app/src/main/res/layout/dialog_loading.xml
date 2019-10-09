@@ -21,18 +21,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:id="@+id/tv_calling_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="#ffffff"
-            android:gravity="center_horizontal"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/ms_connecting" />
-
     </LinearLayout>
 
 	</RelativeLayout>

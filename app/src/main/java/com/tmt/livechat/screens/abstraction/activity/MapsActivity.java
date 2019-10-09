@@ -1,10 +1,12 @@
 package com.tmt.livechat.screens.abstraction.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -30,7 +32,6 @@ import com.google.android.gms.tasks.Task;
 import com.tmt.livechat.R;
 import com.tmt.livechat.screens.abstraction.mvp.MvpActivity;
 import com.tmt.livechat.utils.LocationUtils;
-import com.tmt.livechat.utils.ViewUtils;
 
 /**
  * Created by mohammednabil on 2019-09-18.
@@ -85,7 +86,7 @@ public abstract class MapsActivity extends MvpActivity implements OnMapReadyCall
 
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
-                    layoutParams.setMargins(0, ViewUtils.getValueInDp(this, 60), ViewUtils.getValueInDp(this, 30), 0);
+                    layoutParams.setMargins(0, getValueInDp(this, 60), getValueInDp(this, 30), 0);
 
                     if (mGoogleMap != null) {
                         mGoogleMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
@@ -118,6 +119,10 @@ public abstract class MapsActivity extends MvpActivity implements OnMapReadyCall
         }
     }
 
+
+    private int getValueInDp(Context context, int value) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
+    }
 
     protected synchronized void buildGoogleApiClient() {
         try {
