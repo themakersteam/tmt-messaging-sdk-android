@@ -8,7 +8,6 @@ import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.tmt.livechat.screens.abstraction.mvp.MvpPresenter;
 import com.tmt.livechat.screens.photoviewer.PhotoViewerInterface;
-import com.tmt.livechat.utils.DownloadUtils;
 import com.tmt.livechat.utils.ImageUtils;
 
 /**
@@ -27,7 +26,7 @@ public class PhotoViewerPresenter extends MvpPresenter<PhotoViewerInterface.View
 
     @Override
     public void loadImage(PhotoView image) {
-        ImageUtils.displayImageFromFile(view().activity(), DownloadUtils.getFileFromCache(view().activity(), url), image, new RequestListener() {
+        ImageUtils.displayImageFromUrl(view().activity(), url, image, null,  new RequestListener() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
                 view().showProgress(false);

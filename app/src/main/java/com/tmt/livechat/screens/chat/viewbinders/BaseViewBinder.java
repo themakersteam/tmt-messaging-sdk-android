@@ -5,12 +5,10 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.tmt.livechat.R;
-import com.tmt.livechat.connection_xmpp.constants.DeliveryReceiptStatus;
-import com.tmt.livechat.model.UserMessage;
+import com.tmt.livechat.chat.constants.DeliveryReceiptStatus;
+import com.tmt.livechat.chat.model.BaseMessage;
 
 /**
  * Created by mohammednabil on 2019-09-16.
@@ -21,8 +19,7 @@ public class BaseViewBinder extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-
-    protected void processReadReceipt(Context context, ImageView readReceiptImg, TextView chatTime, UserMessage message) {
+    protected void processReadReceipt(Context context, ImageView readReceiptImg, TextView chatTime, BaseMessage message) {
         if (message.getStatus().equals(DeliveryReceiptStatus.FAILED)) {
             readReceiptImg.setImageResource(R.drawable.ic_sendfail);
             readReceiptImg.setColorFilter(Color.parseColor("#FFDD2C00"));
@@ -38,6 +35,7 @@ public class BaseViewBinder extends RecyclerView.ViewHolder {
             readReceiptImg.setImageResource(R.drawable.ic_msg_progress);
             readReceiptImg.setColorFilter(Color.parseColor("#9b9b9b"));
         }
+
     }
 
 }

@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import com.tmt.livechat.R;
-import com.tmt.livechat.client.Livechat;
+import com.tmt.livechat.app_client.Livechat;
 import com.tmt.livechat.screens.abstraction.mvp.MvpActivity;
 import com.tmt.livechat.screens.chat.activity.LiveChatActivityInterface;
 import com.tmt.livechat.screens.chat.activity.presenter.LiveChatActivityPresenter;

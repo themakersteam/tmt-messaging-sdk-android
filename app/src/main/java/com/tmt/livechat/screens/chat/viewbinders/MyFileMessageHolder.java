@@ -8,7 +8,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.dinuscxj.progressbar.CircleProgressBar;
 import com.tmt.livechat.R;
-import com.tmt.livechat.model.UserMessage;
+import com.tmt.livechat.chat.model.BaseMessage;
+import com.tmt.livechat.chat.model.FileMessage;
 import com.tmt.livechat.screens.chat.adapters.LiveChatAdapter;
 import com.tmt.livechat.utils.DateUtils;
 
@@ -31,12 +32,13 @@ public  class MyFileMessageHolder extends BaseViewBinder {
         circleProgressBar = itemView.findViewById(R.id.circle_progress);
     }
 
-    public void bind(Context context, final UserMessage message, final LiveChatAdapter.OnItemClickListener listener) {
-        fileNameText.setText(message.getFile().getId());
-        timeText.setText(message.getTimeStamp() != null ? DateUtils.formatTime(message.getTimeStamp()) : "");
+    public void bind(Context context, final BaseMessage message, final LiveChatAdapter.OnItemClickListener listener) {
+        fileNameText.setText(message.getId());
+        FileMessage fileMessage = (FileMessage)message;
+        timeText.setText(message.getPosted_at() != null ? DateUtils.formatTime(message.getTimeInMillis()) : "");
         timeText.setTextColor(Color.parseColor("#9b9b9b"));
-        circleProgressBar.setVisibility(message.getProgress() < 100 ? View.VISIBLE : View.GONE);
-        circleProgressBar.setProgress(message.getProgress());
+        circleProgressBar.setVisibility(fileMessage.getProgress() < 100 ? View.VISIBLE : View.GONE);
+        circleProgressBar.setProgress(fileMessage.getProgress());
 
         processReadReceipt(context, readReceipt, timeText, message);
 

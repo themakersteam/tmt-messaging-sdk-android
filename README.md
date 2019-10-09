@@ -74,20 +74,23 @@
 
  * First Step for integrating the app is to connect on the start of the application
 
+ * You will have to deal with multiple project firebase app : https://firebase.google.com/docs/projects/multiprojects#use_multiple_projects_in_your_application
+ * make sure you pass The FirebaseApp instance for Tmt Messaging 
+     * FirebaseApp.initializeApp(this /* Context */, options, "tmt-messaging");
+     * FirebaseApp messaging = FirebaseApp.getInstance("tmt-messaging");
+ 
      ```bash
-    Livechat.connect(Context context, ConnectionRequest connection, ConnectionInterface connectionInterface)
+    Livechat.connect(FirebaseApp app, ConnectionRequest connection, ConnectionInterface connectionInterface)
      ```
 
  * Connection Request Object Has the following items
 
-    *    String username; 
-    *    String password;
-    *    String domain; 
+    *    String authToken; 
 
  * Sample Code for connecting to Message Center
 
    ```bash
-       Livechat.connect(this, connectionRequest, new ConnectionInterface() {
+       Livechat.connect(messaging, connectionRequest, new ConnectionInterface() {
                       @Override
                       public void onConnected() {
 
@@ -104,15 +107,14 @@
  * Getting Total of Unread Messages
 
       ```bash
-     Livechat.getUnReadMessagesCount(Context context, String chat_id, UnReadCountInterface unread_message_interface)
+     Livechat.getUnReadMessagesCount(String chat_id, UnReadCountInterface unread_message_interface)
       ```
- * if chat_id must be provided
+ * chat_id must be provided
 
 #### 4.3 openChatView()
- * Joining the chat by openChatViewRequest(service_url, chat_id) provided
  * Sample code for joining a conversation
     ```bash
-    Livechat.openChatView(Activity: this, chat_id: new OpenChatRequest("service_url","sample_chat_id"), theme: new Theme(toolbar: "title", toolbar_subtitle: "subtitle"), openChatViewInterface: OpenChatViewInterface);
+    Livechat.openChatView(Activity: this, chat_id: "sample_chat_id", theme: new Theme(toolbar: "title", toolbar_subtitle: "subtitle"), openChatViewInterface: OpenChatViewInterface);
     ```
     
  * if Theme object is not provided, the app will take the defaults

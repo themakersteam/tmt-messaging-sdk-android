@@ -3,8 +3,6 @@ package com.tmt.livechat.utils;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -65,51 +63,18 @@ public class ImageUtils {
                     .listener(listener)
                     .into(imageView);
         } else if (url != null) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    Glide.with(context.getApplicationContext())
-                            .load(url)
-                            .thumbnail(0.1f)
-                            .apply(myOptions)
-                            .listener(listener)
-                            .into(imageView);
-                }
-            });
+            Glide.with(context.getApplicationContext())
+                    .load(url)
+                    .thumbnail(0.1f)
+                    .apply(myOptions)
+                    .listener(listener)
+                    .into(imageView);
         }
         else {
             Glide.with(context.getApplicationContext()).clear(imageView);
             imageView.setImageDrawable(null);
         }
     }
-
-
-    /**
-     * Displays an image from a URL in an ImageView.
-     */
-    public static void displayImageFromFile(final Context context, final File file, final ImageView imageView, final RequestListener listener) {
-        final RequestOptions myOptions = new RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.ALL);
-        if (file != null) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    Glide.with(context.getApplicationContext())
-                            .load(file)
-                            .thumbnail(0.1f)
-                            .apply(myOptions)
-                            .listener(listener)
-                            .into(imageView);
-                }
-            });
-        }
-        else {
-            Glide.with(context.getApplicationContext()).clear(imageView);
-            imageView.setImageDrawable(null);
-        }
-    }
-
-
 
     /**
      * Displays an image from a URL in an ImageView.

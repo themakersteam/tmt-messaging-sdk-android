@@ -8,7 +8,9 @@ import android.text.TextUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.tmt.livechat.model.UserMessage;
+import com.tmt.livechat.chat.model.BaseMessage;
+import com.tmt.livechat.chat.model.LocationMessage;
+import com.tmt.livechat.chat.model.TextMessage;
 
 import java.io.IOException;
 import java.util.List;
@@ -76,9 +78,16 @@ public class LocationUtils {
     }
 
 
-    public static String getLocationUrlMessageIfExists(UserMessage mMessage) {
-        return mMessage.isLocation() ? "https://www.google.com/maps/search/?api=1&query=" +  mMessage.getLocation().getLat() + "," + mMessage.getLocation().getLng()
-                : mMessage.getMessage().getBody();
+    public static String getLocationUrlMessageIfExists(BaseMessage mMessage) {
+        if (mMessage.isLocationMessage()) {
+            double lat = ((LocationMessage)mMessage).getLocation().getLatitude();
+            double lng = ((LocationMessage)mMessage).getLocation().getLongitude();
+            return "https://www.google.com/maps/search/?api=1&query=" +  lat + "," + lng;
+        }
+        else if (mMessage.isTextMessage()) {
+            return ((TextMessage)mMessage).getText();
+        }
+        return "";
     }
 
     public static void setCameraToReceivedLocation(GoogleMap googleMap, double lat, double lng) {

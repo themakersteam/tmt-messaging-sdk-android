@@ -1,16 +1,17 @@
 package com.tmt.livechat.screens.chat.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 import com.tmt.livechat.R;
-import com.tmt.livechat.connection_xmpp.XmppClient;
-import com.tmt.livechat.connection_xmpp.constants.DeliveryReceiptStatus;
-import com.tmt.livechat.connection_xmpp.extensions.FileExtension;
-import com.tmt.livechat.connection_xmpp.storage.ReceiptStorage;
-import com.tmt.livechat.model.UserMessage;
+import com.tmt.livechat.chat.ChatInterface;
+import com.tmt.livechat.chat.constants.DeliveryReceiptStatus;
+import com.tmt.livechat.chat.clients.firestore.FirestoreClient;
+import com.tmt.livechat.chat.model.BaseMessage;
+import com.tmt.livechat.chat.model.FileMessage;
 import com.tmt.livechat.screens.chat.viewbinders.MyAudioMessageHolder;
 import com.tmt.livechat.screens.chat.viewbinders.MyFileMessageHolder;
 import com.tmt.livechat.screens.chat.viewbinders.MyImageFileMessageHolder;
@@ -19,10 +20,10 @@ import com.tmt.livechat.screens.chat.viewbinders.OtherAudioMessageHolder;
 import com.tmt.livechat.screens.chat.viewbinders.OtherFileMessageHolder;
 import com.tmt.livechat.screens.chat.viewbinders.OtherImageFileMessageHolder;
 import com.tmt.livechat.screens.chat.viewbinders.OtherUserMessageHolder;
-import com.tmt.livechat.utils.DownloadUtils;
+import com.tmt.livechat.utils.LoadingUtils;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class LiveChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -38,24 +39,28 @@ public class LiveChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int PAGE_SIZE = 20;
 
     private Context mContext;
-    private DownloadUtils downloadUtils;
 
-    private List<UserMessage> mMessageList;
+    private List<BaseMessage> mMessageList;
 
     private OnItemClickListener mItemClickListener;
 
-    private XmppClient xmppClient;
+    private FirestoreClient chatClient;
+
+    private long last_received_read_at = 0;
+
+    private LoadingUtils loadingUtils;
 
     public interface OnItemClickListener {
-        void onUserMessageItemClick(UserMessage message);
+        void onUserMessageItemClick(BaseMessage message);
     }
 
 
-    public LiveChatAdapter(Context context, XmppClient xmppClient) {
+    public LiveChatAdapter(Context context, FirestoreClient chatClient) {
         mContext = context;
-        downloadUtils = new DownloadUtils(context);
         mMessageList = new ArrayList<>();
-        this.xmppClient = xmppClient;
+        loadingUtils = new LoadingUtils(context);
+        loadingUtils.showOnScreenLoading();
+        this.chatClient = chatClient;
     }
 
     /**
@@ -84,19 +89,19 @@ public class LiveChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case VIEW_TYPE_FILE_MESSAGE_IMAGE_ME:
                 View myImageFileMsgView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.list_item_group_chat_file_image_me, parent, false);
-                return new MyImageFileMessageHolder(myImageFileMsgView, downloadUtils);
+                return new MyImageFileMessageHolder(myImageFileMsgView);
             case VIEW_TYPE_FILE_MESSAGE_IMAGE_OTHER:
                 View otherImageFileMsgView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.list_item_group_chat_file_image_other, parent, false);
-                return new OtherImageFileMessageHolder(otherImageFileMsgView, downloadUtils);
+                return new OtherImageFileMessageHolder(otherImageFileMsgView);
             case VIEW_TYPE_FILE_MESSAGE_AUDIO_OTHER:
                 View audioFileMsgView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.list_item_group_chat_audio_other, parent, false);
-                return new OtherAudioMessageHolder(audioFileMsgView, downloadUtils);
+                return new OtherAudioMessageHolder(audioFileMsgView);
             case VIEW_TYPE_FILE_MESSAGE_AUDIO_ME:
                 View audioMyFileMsgView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.list_item_group_chat_audio_me, parent, false);
-                return new MyAudioMessageHolder(audioMyFileMsgView, downloadUtils);
+                return new MyAudioMessageHolder(audioMyFileMsgView);
             default:
                 return null;
 
@@ -108,7 +113,7 @@ public class LiveChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        UserMessage message = mMessageList.get(position);
+        BaseMessage message = mMessageList.get(position);
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_USER_MESSAGE_ME:
                 ((MyUserMessageHolder) holder).bind(mContext, message, mItemClickListener, position);
@@ -145,32 +150,32 @@ public class LiveChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemViewType(int position) {
 
-        UserMessage message = mMessageList.get(position);
+        BaseMessage message = mMessageList.get(position);
 
-        if (!message.isFile()) {
-            if (xmppClient.isMyMessage(message.getMessage().getFrom()))
+        if (!message.isFileMessage()) {
+            if (chatClient.isMyMessage(message.getSender()))
                 return VIEW_TYPE_USER_MESSAGE_ME;
             else
                 return VIEW_TYPE_USER_MESSAGE_OTHER;
         }
         else {
-            FileExtension fileMessage = message.getFile();
-            if (fileMessage.getContentType().toLowerCase().contains("image")) {
-                if (xmppClient.isMyMessage(message.getMessage().getFrom())) {
+            FileMessage fileMessage = (FileMessage) message;
+            if (fileMessage.getFile_type().toLowerCase().contains("image")) {
+                if (chatClient.isMyMessage(message.getSender())) {
                     return VIEW_TYPE_FILE_MESSAGE_IMAGE_ME;
                 } else {
                     return VIEW_TYPE_FILE_MESSAGE_IMAGE_OTHER;
                 }
             }
-            else if (fileMessage.getContentType().toLowerCase().contains("audio") || fileMessage.getContentType().toLowerCase().contains("3gpp")) {
-                if (xmppClient.isMyMessage(message.getMessage().getFrom())) {
+            else if (fileMessage.getFile_type().toLowerCase().contains("audio") || fileMessage.getFile_type().toLowerCase().contains("3gpp")) {
+                if (chatClient.isMyMessage(message.getSender())) {
                     return VIEW_TYPE_FILE_MESSAGE_AUDIO_ME;
                 } else {
                     return VIEW_TYPE_FILE_MESSAGE_AUDIO_OTHER;
                 }
             }
             else {
-                if (xmppClient.isMyMessage(message.getMessage().getFrom())) {
+                if (chatClient.isMyMessage(message.getSender())) {
                     return VIEW_TYPE_FILE_MESSAGE_ME;
                 } else {
                     return VIEW_TYPE_FILE_MESSAGE_OTHER;
@@ -192,26 +197,34 @@ public class LiveChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void load() {
         try {
             mMessageList.clear();
-            mMessageList.addAll(xmppClient.loadPrevMessages(PAGE_SIZE));
-            xmppClient.seenTheMessages();
-            notifyDataSetChanged();
+            chatClient.loadPrevMessages(PAGE_SIZE,last_received_read_at, new ChatInterface.LoadPrevInterface() {
+                @Override
+                public void onReady(List<BaseMessage> baseMessages) {
+                    mMessageList.addAll(baseMessages);
+                    chatClient.updateReadAtTimestamp();
+                    notifyDataSetChanged();
+                    loadingUtils.hideOnScreenLoading();
+                }
+            });
         } catch(Exception e) {
         }
     }
 
     public void updateStatus(String id, String status) {
-        for (UserMessage u : mMessageList) {
-            if (u.getMessage().getStanzaId() != null && u.getMessage().getStanzaId().equals(id)) {
+        for (BaseMessage u : mMessageList) {
+            if (u.getId() != null && u.getId().equals(id)) {
                 u.setStatus(status);
             }
         }
         notifyDataSetChanged();
     }
 
-    public void updateStatus(String room_id) {
-        ReceiptStorage receiptStorage = new ReceiptStorage(mContext);
-        for (UserMessage u : mMessageList) {
-            u.setStatus(u.getTimeStamp() <= receiptStorage.getLastReceivedSeenStamp(room_id) ? DeliveryReceiptStatus.SEEN : DeliveryReceiptStatus.RECEIVED);
+    public void updateStatus(long last_readAt) {
+        this.last_received_read_at = last_readAt;
+        for (BaseMessage u : mMessageList) {
+            if (u.getStatus() != null && u.getStatus().equals(DeliveryReceiptStatus.RECEIVED)) {
+                u.setStatus(u.getPosted_at().toDate().getTime() <= last_readAt ? DeliveryReceiptStatus.SEEN : DeliveryReceiptStatus.RECEIVED);
+            }
         }
         notifyDataSetChanged();
     }
@@ -219,27 +232,30 @@ public class LiveChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void loadPrev() {
         try {
-            mMessageList.addAll(xmppClient.loadPrevMessages(PAGE_SIZE));
-            notifyDataSetChanged();
+            chatClient.loadPrevMessages(PAGE_SIZE, last_received_read_at, new ChatInterface.LoadPrevInterface() {
+                @Override
+                public void onReady(List<BaseMessage> baseMessages) {
+                    mMessageList.addAll(baseMessages);
+                    notifyDataSetChanged();
+                }
+            });
         } catch(Exception e) {
         }
     }
 
 
-    public boolean isFailedMessage(UserMessage message) {
-        return message.getStatus().equals(DeliveryReceiptStatus.FAILED);
+    public boolean isFailedMessage(BaseMessage message) {
+        return message.getStatus() != null && message.getStatus().equals(DeliveryReceiptStatus.FAILED);
     }
 
 
-    public void removeFailedMessage(UserMessage message) {
-        if (message instanceof UserMessage) {
-            removeMessageFromArrayList(message);
-        }
+    public void removeFailedMessage(BaseMessage message) {
+        removeMessageFromArrayList(message);
         notifyDataSetChanged();
     }
 
-    private boolean removeMessageFromArrayList(UserMessage baseMessage) {
-        for (UserMessage userMessage : mMessageList) {
+    private boolean removeMessageFromArrayList(BaseMessage baseMessage) {
+        for (BaseMessage userMessage : mMessageList) {
             if (userMessage != null && userMessage.equals(baseMessage)) {
                 return mMessageList.remove(userMessage);
             }
@@ -247,16 +263,16 @@ public class LiveChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return false;
     }
 
-    public void setFileProgressPercent(UserMessage message, int percent) {
-        for (UserMessage userMessage : mMessageList) {
-            if (message.getMessage().getStanzaId().equals(userMessage.getMessage().getStanzaId())) {
-                userMessage.setProgress(percent);
+    public void setFileProgressPercent(FileMessage message, int percent) {
+        for (BaseMessage userMessage : mMessageList) {
+            if (message.getId().equals(userMessage.getId())) {
+                ((FileMessage)userMessage).getFile().setProgress(percent);
             }
         }
         notifyDataSetChanged();
     }
 
-    public void addFirst(UserMessage message) {
+    public void addFirst(BaseMessage message) {
         mMessageList.add(0, message);
         notifyDataSetChanged();
     }

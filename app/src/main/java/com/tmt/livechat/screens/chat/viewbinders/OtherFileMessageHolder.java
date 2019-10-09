@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.tmt.livechat.R;
-import com.tmt.livechat.model.UserMessage;
+import com.tmt.livechat.chat.model.BaseMessage;
 import com.tmt.livechat.screens.chat.adapters.LiveChatAdapter;
 import com.tmt.livechat.utils.DateUtils;
 
@@ -24,9 +24,9 @@ public class OtherFileMessageHolder extends BaseViewBinder {
 
     }
 
-    public void bind(final UserMessage message, final LiveChatAdapter.OnItemClickListener listener) {
-        fileNameText.setText(message.getFile().getId());
-        timeText.setText(message.getTimeStamp() != null ? DateUtils.formatTime(message.getTimeStamp()) : "");
+    public void bind(final BaseMessage message, final LiveChatAdapter.OnItemClickListener listener) {
+        fileNameText.setText(message.getId());
+        timeText.setText(message.getPosted_at() != null ? DateUtils.formatTime(message.getTimeInMillis()) : "");
 
         if (listener != null) {
             itemView.setOnClickListener(new View.OnClickListener() {
