@@ -105,7 +105,7 @@ public class ChannelService extends AbstractService implements ChannelServiceInt
                 if (!id.equals(getUserId())) {
                     ParticipantData participantData = channel.getParticipants_data().get(id);
                     if (participantData.getTyping_at() != null) {
-                        if ((participantData.getTyping_at().toDate().getTime() - Timestamp.now().toDate().getTime()) > 29000) {
+                        if ((participantData.getTyping_at().toDate().getTime() - Timestamp.now().toDate().getTime()) > 20000) {
                             callbacks.onTypingStatusUpdated(participantData.getDisplay_name() , true);
                             isTyping = true;
                         }
