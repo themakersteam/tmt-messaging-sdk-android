@@ -3,6 +3,8 @@ package com.tmt.livechat.chat.clients.firestore.service.abstraction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.tmt.livechat.app_client.Livechat;
 import com.tmt.livechat.chat.clients.firestore.service.message.constants.MessageConstants;
@@ -32,7 +34,7 @@ public abstract class AbstractService {
         return FirebaseFirestore.getInstance(Livechat.instance().getFirebaseApp());
     }
 
-    private FirebaseAuth getAuth() {
+    protected FirebaseAuth getAuth() {
         return FirebaseAuth.getInstance(Livechat.instance().getFirebaseApp());
     }
 
@@ -57,5 +59,13 @@ public abstract class AbstractService {
 
     protected FirebaseStorage getStorage() {
         return FirebaseStorage.getInstance(Livechat.instance().getFirebaseApp());
+    }
+
+    protected FirebaseFunctions getFunctions() {
+        return FirebaseFunctions.getInstance(Livechat.instance().getFirebaseApp(), "europe-west1");
+    }
+
+    protected FirebaseInstanceId getInstanceId() {
+        return FirebaseInstanceId.getInstance(Livechat.instance().getFirebaseApp());
     }
 }

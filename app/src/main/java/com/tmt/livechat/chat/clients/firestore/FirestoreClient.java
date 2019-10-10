@@ -4,6 +4,7 @@ import android.content.Context;
 import com.tmt.livechat.chat.ChatInterface;
 import com.tmt.livechat.chat.clients.firestore.service.filedownload.FileDownloadService;
 import com.tmt.livechat.chat.clients.firestore.service.fileupload.FileUploadService;
+import com.tmt.livechat.chat.clients.firestore.service.notification.NotificationService;
 import com.tmt.livechat.chat.clients.firestore.service.unread.UnreadService;
 import com.tmt.livechat.chat.constants.ChatErrorCodes;
 import com.tmt.livechat.chat.clients.firestore.service.archiving.ArchivingService;
@@ -156,5 +157,6 @@ public class FirestoreClient implements ChatInterface, ChannelServiceInterface.C
         UnreadService.instance(channel_name).destroy();
         UserService.instance().destroy();
         UserStatusService.instance().destroy();
+        NotificationService.instance().destroy();
     }
 }
