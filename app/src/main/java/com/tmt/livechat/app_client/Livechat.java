@@ -2,15 +2,10 @@ package com.tmt.livechat.app_client;
 
 import android.app.Activity;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import com.tmt.livechat.chat.clients.firestore.service.auth.AuthService;
 import com.tmt.livechat.chat.clients.firestore.service.filedownload.FileDownloadService;
 import com.tmt.livechat.chat.clients.firestore.service.unread.UnreadService;
-import com.tmt.livechat.chat.constants.ChatErrorCodes;
 import com.tmt.livechat.app_client.interfaces.ConnectionInterface;
 import com.tmt.livechat.app_client.interfaces.OpenChatInterface;
 import com.tmt.livechat.app_client.interfaces.UnreadCountInterface;
@@ -33,17 +28,7 @@ public class Livechat extends LivechatInterface {
     @Override
     public void connect(FirebaseApp firebaseApp, ConnectionRequest connectionRequest, final ConnectionInterface connectionInterface) {
         this.firebaseApp = firebaseApp;
-        FirebaseAuth.getInstance(firebaseApp).signInWithCustomToken(connectionRequest.getAuthToken()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    connectionInterface.onConnected();
-                }
-                else {
-                    connectionInterface.onConnectionError(ChatErrorCodes.CONNECTION_ERROR, task.getException());
-                }
-            }
-        });
+        AuthService.instance().connect(connectionRequest.getAuthToken(), connectionInterface);
     }
 
     @Override
@@ -53,7 +38,7 @@ public class Livechat extends LivechatInterface {
 
     @Override
     public boolean isConnected() {
-        return firebaseApp != null && FirebaseAuth.getInstance(firebaseApp).getCurrentUser() != null;
+        return AuthService.instance().isConnected();
     }
 
     @Override
@@ -90,8 +75,7 @@ public class Livechat extends LivechatInterface {
 
     @Override
     public void disconnect() {
-        if (isConnected() && firebaseApp != null)
-            FirebaseAuth.getInstance(firebaseApp).signOut();
+        AuthService.instance().disconnect();
     }
 
     /**
