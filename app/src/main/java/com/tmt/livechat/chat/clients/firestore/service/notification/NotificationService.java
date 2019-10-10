@@ -12,7 +12,7 @@ import java.util.Map;
 public class NotificationService extends AbstractService implements NotificationServiceInterface {
 
     private final String ADD_USER_TOKEN_FUCNTION = "addUserFcmToken";
-    private final String REMOTE_USER_TOKEN_FUNCTION = "removeUserFcmToken";
+    private final String REMOVE_USER_TOKEN_FUNCTION = "removeUserFcmToken";
 
 
     private static NotificationService notificationService;
@@ -21,9 +21,9 @@ public class NotificationService extends AbstractService implements Notification
     public void registerNotificationToken() {
         getToken(new TokenCallbacks() {
             @Override
-            public void onToken(String token) {
+            public void onToken(String fcmToken) {
                 Map<String, Object> data = new HashMap<>();
-                data.put("token", token);
+                data.put("token", fcmToken);
                 getFunctions().getHttpsCallable(ADD_USER_TOKEN_FUCNTION).call(data);
             }
         });
@@ -41,7 +41,14 @@ public class NotificationService extends AbstractService implements Notification
 
     @Override
     public void unregisterNotificationToken() {
-        getFunctions().getHttpsCallable(REMOTE_USER_TOKEN_FUNCTION).call();
+        getToken(new TokenCallbacks() {
+            @Override
+            public void onToken(String token) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("token", token);
+                getFunctions().getHttpsCallable(REMOVE_USER_TOKEN_FUNCTION).call(data);
+            }
+        });
     }
 
     @Override

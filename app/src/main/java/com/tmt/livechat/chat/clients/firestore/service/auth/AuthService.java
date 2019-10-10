@@ -7,6 +7,7 @@ import com.google.firebase.auth.AuthResult;
 import com.tmt.livechat.app_client.Livechat;
 import com.tmt.livechat.app_client.interfaces.ConnectionInterface;
 import com.tmt.livechat.chat.clients.firestore.service.abstraction.AbstractService;
+import com.tmt.livechat.chat.clients.firestore.service.notification.NotificationService;
 import com.tmt.livechat.chat.constants.ChatErrorCodes;
 
 /**
@@ -23,6 +24,7 @@ public class AuthService extends AbstractService implements AuthServiceInterface
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    NotificationService.instance().registerNotificationToken();
                     connectionInterface.onConnected();
                 }
                 else {
@@ -40,6 +42,7 @@ public class AuthService extends AbstractService implements AuthServiceInterface
 
     @Override
     public void disconnect() {
+        NotificationService.instance().unregisterNotificationToken();
         if (isConnected())
             getAuth().signOut();
     }
