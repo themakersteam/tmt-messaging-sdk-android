@@ -42,13 +42,13 @@ publishing {
         }
     }
     repositories {
-        maven {
-            credentials {
-                username gitUser
-                password gitToken
-            }
-            url "https://maven.pkg.github.com/themakersteam/tmt-live-chat-sdk-android"
-        }
+//        maven {
+//            credentials {
+//                username gitUser
+//                password gitToken
+//            }
+//            url "https://maven.pkg.github.com/themakersteam/tmt-live-chat-sdk-android"
+//        }
     }
 }
 
