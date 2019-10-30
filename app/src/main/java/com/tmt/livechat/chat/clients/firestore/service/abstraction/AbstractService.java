@@ -62,7 +62,7 @@ public abstract class AbstractService {
     }
 
     protected FirebaseFunctions getFunctions() {
-        return FirebaseFunctions.getInstance(Livechat.instance().getFirebaseApp(), "europe-west1");
+        return FirebaseFunctions.getInstance(Livechat.instance().getFirebaseApp(), "us-central1");
     }
 
     protected FirebaseInstanceId getInstanceId() {
